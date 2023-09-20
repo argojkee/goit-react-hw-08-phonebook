@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const EditContactFormStyle = styled.form`
   width: 80%;
@@ -11,7 +11,7 @@ export const EditContactFormStyle = styled.form`
   padding: 40px 10px;
   border-radius: 20px;
   margin-top: 40px;
-
+  border: 1px solid black;
   .label-container {
     width: 180px;
     margin-left: auto;

@@ -1,17 +1,17 @@
-import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import { deleteContact } from "redux/contacts/contactsOperations";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { PiSpinnerGap } from "react-icons/pi";
-import { getDeleting } from "redux/contacts/contactsSlice";
-import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { deleteContact } from 'redux/contacts/contactsOperations';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { PiSpinnerGap } from 'react-icons/pi';
+import { getDeleting } from 'redux/contacts/contactsSlice';
+import { useState } from 'react';
 
 const DeleteContactButton = ({ userId }) => {
   const dispatch = useDispatch();
   const Deleting = useSelector(getDeleting);
   const [isCurrentButton, setIsCurrentButton] = useState(false);
 
-  const handleDelete = (e) => {
+  const handleDelete = e => {
     setIsCurrentButton(true);
     dispatch(deleteContact(userId)).finally(() => {
       setIsCurrentButton(false);
@@ -19,7 +19,11 @@ const DeleteContactButton = ({ userId }) => {
   };
 
   return (
-    <button className="button-item delete" onClick={handleDelete}>
+    <button
+      disabled={Deleting}
+      className="button-item delete"
+      onClick={handleDelete}
+    >
       {Deleting && isCurrentButton ? (
         <PiSpinnerGap className="spinner" size={24} />
       ) : (

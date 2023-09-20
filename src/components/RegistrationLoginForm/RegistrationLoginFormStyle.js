@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const RegistrationLoginFormStyle = styled.form`
   border: 1px solid black;
@@ -10,7 +10,8 @@ export const RegistrationLoginFormStyle = styled.form`
   row-gap: 40px;
   display: flex;
   flex-direction: column;
-  width: 600px;
+  max-width: 600px;
+  /* max-width: 95%; */
   margin-left: auto;
   margin-right: auto;
   background-color: rgba(209, 188, 138, 0.7);

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const EditModalStyled = styled.div`
   position: fixed;
@@ -12,9 +12,8 @@ const EditModalStyled = styled.div`
 
   .modal {
     position: relative;
-    width: 500px;
     height: 400px;
-    max-width: 95%;
+    width: 80%;
     max-height: 95%;
     position: absolute;
     background-color: rgba(255, 248, 220, 1);
@@ -24,6 +23,12 @@ const EditModalStyled = styled.div`
     border-radius: 20px;
     padding: 50px 20px;
     text-align: center;
+  }
+
+  @media screen and (min-width: 768px) {
+    .modal {
+      width: 500px;
+    }
   }
   .first {
     color: tomato;

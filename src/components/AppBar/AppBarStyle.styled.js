@@ -62,4 +62,18 @@ export const AppBarStyle = styled.header`
   .nav-link {
     font-size: 25px;
   }
+
+  @media screen and (max-width: 460px) {
+    .nav-list {
+      column-gap: 10px;
+    }
+
+    .nav-link {
+      font-size: 15px;
+    }
+
+    .user-email {
+      font-size: 10px;
+    }
+  }
 `;

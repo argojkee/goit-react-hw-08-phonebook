@@ -1,22 +1,22 @@
-import ContactItem from "./ContactItem";
-import { useSelector, useDispatch } from "react-redux";
-import ContactsListStyled from "./ContactsListStyle.styled";
+import ContactItem from './ContactItem';
+import { useSelector, useDispatch } from 'react-redux';
+import ContactsListStyled from './ContactsListStyle.styled';
 import {
   getContactsList,
   getLoading,
   getError,
-} from "redux/contacts/contactsSlice";
-import { getFilter } from "redux/contacts/filterSlice";
-import { fetchContacts } from "../../redux/contacts/contactsOperations";
-import { useEffect } from "react";
-import { getIsLoggedIn } from "redux/auth/authSelectors";
-import EditContactModal from "components/EditContactModal/EditContactModal";
-import { useCustomContext } from "context/userEditContext";
-import MainSpinner from "./MainSpinner";
-import { ContactsContainerStyle } from "./ContactsContainer.styled";
-import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import ReactPaginate from "react-paginate";
-import { useState } from "react";
+} from 'redux/contacts/contactsSlice';
+import { getFilter } from 'redux/contacts/filterSlice';
+import { fetchContacts } from '../../redux/contacts/contactsOperations';
+import { useEffect } from 'react';
+import { getIsLoggedIn } from 'redux/auth/authSelectors';
+import EditContactModal from 'components/EditContactModal/EditContactModal';
+import { useCustomContext } from 'context/userEditContext';
+import MainSpinner from './MainSpinner';
+import { ContactsContainerStyle } from './ContactsContainer.styled';
+import { GrFormNextLink, GrFormPreviousLink } from 'react-icons/gr';
+import ReactPaginate from 'react-paginate';
+import { useState } from 'react';
 
 const ContactList = () => {
   const contacts = useSelector(getContactsList);
@@ -38,7 +38,7 @@ const ContactList = () => {
         ? [
             ...contacts
               .filter(
-                (contact) =>
+                contact =>
                   contact.name.toLowerCase().includes(filter.toLowerCase()) ||
                   contact.number.toLowerCase().includes(filter.toLowerCase())
               )
@@ -51,13 +51,32 @@ const ContactList = () => {
   }, [contacts, filter]);
 
   useEffect(() => {
+    const paginationList = document.querySelector('.pagination-list');
+    const firstPage = paginationList?.firstElementChild.nextSibling;
     const endOffset = itemOffset + itemsPerPage;
+
+    console.log(endOffset);
+    if (endOffset === itemsPerPage) {
+      firstPage?.classList.add('active');
+    } else {
+      firstPage?.classList.remove('active');
+    }
 
     setCurrentItems(visibleContacts?.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(visibleContacts?.length / itemsPerPage));
+
+    if (
+      visibleContacts.length <=
+        Math.ceil(visibleContacts?.length / itemsPerPage) * itemsPerPage &&
+      itemOffset ===
+        Math.ceil(visibleContacts?.length / itemsPerPage) * itemsPerPage
+    ) {
+      setItemOffset(0);
+      firstPage?.classList.add('active');
+    }
   }, [itemOffset, itemsPerPage, visibleContacts]);
 
-  const handlePageClick = (event) => {
+  const handlePageClick = event => {
     const newOffset = (event.selected * itemsPerPage) % visibleContacts?.length;
 
     setItemOffset(newOffset);
@@ -110,7 +129,7 @@ const ContactList = () => {
       <ContactsContainerStyle>
         <ContactsListStyled>
           {context.isShowModal && <EditContactModal />}
-          {currentItems?.map((contact) => (
+          {currentItems?.map(contact => (
             <ContactItem
               userName={contact.name}
               userNumber={contact.number}
@@ -121,6 +140,7 @@ const ContactList = () => {
         </ContactsListStyled>
         {visibleContacts.length > itemsPerPage && (
           <ReactPaginate
+            className="pagination-list pagination"
             nextLabel={<GrFormNextLink size={16} />}
             onPageChange={handlePageClick}
             pageRangeDisplayed={3}

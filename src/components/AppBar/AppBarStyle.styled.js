@@ -45,6 +45,7 @@ export const AppBarStyle = styled.header`
     align-items: center;
     font-size: 20px;
     column-gap: 4px;
+    color: black;
   }
 
   .nav-link:hover,

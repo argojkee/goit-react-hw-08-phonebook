@@ -1,7 +1,6 @@
 import ContactItem from './ContactItem';
 import { useSelector } from 'react-redux';
 import ContactsListStyled from './ContactsListStyle.styled';
-import { getError } from 'redux/contacts/contactsSlice';
 import { getFilter } from 'redux/contacts/filterSlice';
 import { useEffect } from 'react';
 import EditContactModal from 'components/EditContactModal/EditContactModal';
@@ -15,14 +14,17 @@ import { useFetchContactsQuery } from '../../redux/baseApi';
 
 const ContactList = () => {
   const filter = useSelector(getFilter);
-  const error = useSelector(getError);
   const context = useCustomContext();
   const [visibleContacts, setVisibleContacts] = useState([]);
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
-  const { data: contacts, isLoading: loading } = useFetchContactsQuery();
+  const {
+    data: contacts,
+    isLoading: loading,
+    isError: error,
+  } = useFetchContactsQuery();
 
   useEffect(() => {
     setVisibleContacts(
@@ -76,7 +78,10 @@ const ContactList = () => {
   if (error) {
     return (
       <ContactsContainerStyle>
-        <h2 className="error">{error}</h2>;
+        <h2 className="error">
+          Sorry, something went wrong. Please, try again
+        </h2>
+        ;
       </ContactsContainerStyle>
     );
   }

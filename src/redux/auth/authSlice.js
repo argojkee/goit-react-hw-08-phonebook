@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import authOperations from "./authOperations";
+import { createSlice } from '@reduxjs/toolkit';
+import { baseApi } from '../baseApi';
 
 const initialState = {
   user: { name: null, email: null },
@@ -10,58 +10,64 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(authOperations.register.pending, (state) => {
+      .addMatcher(baseApi.endpoints.register.matchPending, state => {
         state.isPending = true;
       })
-      .addCase(authOperations.register.fulfilled, (state, action) => {
+      .addMatcher(
+        baseApi.endpoints.register.matchFulfilled,
+        (state, action) => {
+          state.user.name = action.payload.user.name;
+          state.user.email = action.payload.user.email;
+          state.token = action.payload.token;
+          state.isLoggedIn = true;
+          state.isPending = false;
+        }
+      )
+      .addMatcher(baseApi.endpoints.register.matchRejected, state => {
+        state.isPending = false;
+      })
+      .addMatcher(baseApi.endpoints.logIn.matchPending, state => {
+        state.isPending = true;
+      })
+      .addMatcher(baseApi.endpoints.logIn.matchFulfilled, (state, action) => {
         state.user.name = action.payload.user.name;
         state.user.email = action.payload.user.email;
         state.token = action.payload.token;
         state.isLoggedIn = true;
         state.isPending = false;
       })
-      .addCase(authOperations.register.rejected, (state) => {
+      .addMatcher(baseApi.endpoints.logIn.matchRejected, state => {
         state.isPending = false;
       })
-      .addCase(authOperations.logIn.pending, (state) => {
+      .addMatcher(baseApi.endpoints.logOut.matchPending, state => {
         state.isPending = true;
       })
-      .addCase(authOperations.logIn.fulfilled, (state, action) => {
-        state.user.name = action.payload.user.name;
-        state.user.email = action.payload.user.email;
-        state.token = action.payload.token;
-        state.isLoggedIn = true;
-        state.isPending = false;
-      })
-      .addCase(authOperations.logIn.rejected, (state) => {
-        state.isPending = false;
-      })
-      .addCase(authOperations.logOut.pending, (state) => {
-        state.isPending = true;
-      })
-      .addCase(authOperations.logOut.fulfilled, (state) => {
+      .addMatcher(baseApi.endpoints.logOut.matchFulfilled, state => {
         state.user = { name: null, email: null };
         state.token = null;
         state.isLoggedIn = false;
         state.isPending = false;
       })
-      .addCase(authOperations.logOut.rejected, (state) => {
+      .addMatcher(baseApi.endpoints.logOut.matchRejected, state => {
         state.isPending = false;
       })
-      .addCase(authOperations.fetchCurrentUser.pending, (state) => {
+      .addMatcher(baseApi.endpoints.fetchCurrentUser.matchPending, state => {
         state.isLoadingAuthUser = true;
       })
-      .addCase(authOperations.fetchCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoggedIn = true;
-        state.isLoadingAuthUser = false;
-        state.isPending = false;
-      })
-      .addCase(authOperations.fetchCurrentUser.rejected, (state) => {
+      .addMatcher(
+        baseApi.endpoints.fetchCurrentUser.matchFulfilled,
+        (state, action) => {
+          state.user = action.payload;
+          state.isLoggedIn = true;
+          state.isLoadingAuthUser = false;
+          state.isPending = false;
+        }
+      )
+      .addMatcher(baseApi.endpoints.fetchCurrentUser.matchRejected, state => {
         state.isLoadingAuthUser = false;
         state.token = null;
         state.isPending = false;

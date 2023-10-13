@@ -1,10 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  fetchContacts,
-  addContact,
-  deleteContact,
-  editContact,
-} from "./contactsOperations";
+import { createSlice } from '@reduxjs/toolkit';
+
+import { baseApi } from 'redux/baseApi';
 
 const initialState = {
   contacts: {
@@ -18,60 +14,78 @@ const initialState = {
 };
 
 export const contactsSlice = createSlice({
-  name: "contactsList",
+  name: 'contacts',
   initialState,
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchContacts.fulfilled, (state, action) => {
-        state.contacts.contacts = action.payload;
-        state.contacts.isLoading = false;
-        state.contacts.error = null;
-      })
-      .addCase(fetchContacts.pending, (state) => {
+      .addMatcher(
+        baseApi.endpoints.fetchContacts.matchFulfilled,
+        (state, action) => {
+          state.contacts.contacts = action.payload;
+          state.contacts.isLoading = false;
+          state.contacts.error = null;
+        }
+      )
+      .addMatcher(baseApi.endpoints.fetchContacts.matchPending, state => {
         state.contacts.isLoading = true;
         state.contacts.error = null;
       })
-      .addCase(fetchContacts.rejected, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.error = action.payload;
-      })
-      .addCase(addContact.fulfilled, (state, action) => {
-        state.contacts.contacts.push(action.payload);
-        state.contacts.isLoading = false;
-        state.contacts.error = null;
-        state.contacts.isAdding = false;
-      })
-      .addCase(addContact.pending, (state) => {
+      .addMatcher(
+        baseApi.endpoints.fetchContacts.matchRejected,
+        (state, action) => {
+          state.contacts.isLoading = false;
+          state.contacts.error = action.payload;
+        }
+      )
+      .addMatcher(
+        baseApi.endpoints.addContact.matchFulfilled,
+        (state, action) => {
+          state.contacts.contacts.push(action.payload);
+          state.contacts.isLoading = false;
+          state.contacts.error = null;
+          state.contacts.isAdding = false;
+        }
+      )
+      .addMatcher(baseApi.endpoints.addContact.matchPending, state => {
         state.contacts.isLoading = true;
         state.contacts.error = null;
         state.contacts.isAdding = true;
       })
-      .addCase(addContact.rejected, (state) => {
+      .addMatcher(baseApi.endpoints.addContact.matchRejected, state => {
         state.contacts.isLoading = false;
         state.contacts.isAdding = false;
       })
-      .addCase(deleteContact.fulfilled, (state, action) => {
-        state.contacts.contacts = state.contacts.contacts.filter(
-          (contact) => contact.id !== action.payload.id
-        );
-        state.contacts.isDeleting = false;
-        state.contacts.error = null;
-      })
-      .addCase(deleteContact.pending, (state, action) => {
-        state.contacts.isDeleting = true;
-        state.contacts.error = null;
-      })
-      .addCase(deleteContact.rejected, (state, action) => {
-        state.contacts.isDeleting = false;
-      })
-      .addCase(editContact.pending, (state) => {
+      .addMatcher(
+        baseApi.endpoints.deleteContact.matchFulfilled,
+        (state, action) => {
+          state.contacts.contacts = state.contacts.contacts.filter(
+            contact => contact.id !== action.payload.id
+          );
+          state.contacts.isDeleting = false;
+          state.contacts.error = null;
+        }
+      )
+      .addMatcher(
+        baseApi.endpoints.deleteContact.matchPending,
+        (state, action) => {
+          state.contacts.isDeleting = true;
+          state.contacts.error = null;
+        }
+      )
+      .addMatcher(
+        baseApi.endpoints.deleteContact.matchRejected,
+        (state, action) => {
+          state.contacts.isDeleting = false;
+        }
+      )
+      .addMatcher(baseApi.endpoints.editContact.matchPending, state => {
         state.contacts.isEditing = true;
         state.contacts.error = null;
       })
-      .addCase(
-        editContact.fulfilled,
+      .addMatcher(
+        baseApi.endpoints.editContact.matchFulfilled,
         (state, { payload: { id: respId, name, number } }) => {
-          state.contacts.contacts = state.contacts.contacts.map((contact) =>
+          state.contacts.contacts = state.contacts.contacts.map(contact =>
             contact.id === respId ? { id: respId, name, number } : contact
           );
           state.contacts.isEditing = false;
@@ -79,15 +93,15 @@ export const contactsSlice = createSlice({
           state.contacts.error = null;
         }
       )
-      .addCase(editContact.rejected, (state, action) => {
+      .addMatcher(baseApi.endpoints.editContact.matchRejected, state => {
         state.contacts.isEditing = false;
       });
   },
 });
 
-export const getContactsList = (state) => state.contactsList.contacts.contacts;
-export const getLoading = (state) => state.contactsList.contacts.isLoading;
-export const getError = (state) => state.contactsList.contacts.error;
-export const getDeleting = (state) => state.contactsList.contacts.isDeleting;
-export const getIsAdding = (state) => state.contactsList.contacts.isAdding;
-export const getIsEditing = (state) => state.contactsList.contacts.isEditing;
+export const getContactsList = state => state.contacts.contacts.contacts;
+export const getLoading = state => state.contacts.contacts.isLoading;
+export const getError = state => state.contacts.contacts.error;
+export const getDeleting = state => state.contacts.contacts.isDeleting;
+export const getIsAdding = state => state.contacts.contacts.isAdding;
+export const getIsEditing = state => state.contacts.contacts.isEditing;

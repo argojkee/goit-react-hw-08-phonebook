@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getContactsList, getIsAdding } from "redux/contacts/contactsSlice";
-import { addContact } from "redux/contacts/contactsOperations";
-import { PiSpinnerGap } from "react-icons/pi";
-import AddContactFormStyle from "./FormStyle.styled";
-import { toast } from "react-toastify";
-import { GrAdd } from "react-icons/gr";
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getContactsList, getIsAdding } from 'redux/contacts/contactsSlice';
+import { useAddContactMutation } from 'redux/baseApi';
+import { PiSpinnerGap } from 'react-icons/pi';
+import AddContactFormStyle from './FormStyle.styled';
+import { GrAdd } from 'react-icons/gr';
+import { toastSuccess, toastError } from 'toastNotification/toastNotification';
 
 const AddContactForm = () => {
-  const [number, setNumber] = useState("");
-  const [name, setName] = useState("");
+  const [number, setNumber] = useState('');
+  const [name, setName] = useState('');
   const contacts = useSelector(getContactsList);
   const isAdding = useSelector(getIsAdding);
-  const [notify, setNotify] = useState("Please, enter contact info to add");
+  const [notify, setNotify] = useState('Please, enter contact info to add');
   const [canSubmit, setCanSubmit] = useState(false);
-  const dispatch = useDispatch();
+  const [addContact] = useAddContactMutation();
 
   const handlerChangeInput = ({ target }) => {
-    if (target.name === "name") {
+    if (target.name === 'name') {
       setName(target.value);
     } else {
       setNumber(target.value);
@@ -26,59 +26,62 @@ const AddContactForm = () => {
 
   useEffect(() => {
     if (!name && !number) {
-      setNotify("Please, enter contact name and number to add");
+      setNotify('Please, enter contact name and number to add');
       setCanSubmit(false);
     } else if (name && name.length < 3) {
-      setNotify("Contact name should be 3 symbols minimum");
+      setNotify('Contact name should be 3 symbols minimum');
       setCanSubmit(false);
     } else if (name && name.length > 16) {
-      setNotify("Contact name should be 16 symbols maximum");
+      setNotify('Contact name should be 16 symbols maximum');
       setCanSubmit(false);
     } else if (name && !number) {
-      setNotify("Please add contact number");
+      setNotify('Please add contact number');
       setCanSubmit(false);
     } else if (name && number.length < 5) {
-      setNotify("Contact number should be 5 symbols minimum");
+      setNotify('Contact number should be 5 symbols minimum');
       setCanSubmit(false);
     } else if (name && number.length > 16) {
-      setNotify("Contact number should be 16 symbols maximum");
+      setNotify('Contact number should be 16 symbols maximum');
       setCanSubmit(false);
     } else if (number && !name) {
-      setNotify("Please, enter contact name");
+      setNotify('Please, enter contact name');
       setCanSubmit(false);
     } else {
-      setNotify("You can add contact to your book");
+      setNotify('You can add contact to your book');
       setCanSubmit(true);
     }
   }, [name, number]);
 
-  const handlerSubmitForm = (e) => {
+  const handlerSubmitForm = async e => {
     e.preventDefault();
 
     if (
       contacts?.some(
-        (contact) => contact.name.toLowerCase() === name.toLowerCase()
+        contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      toast.error(`${name} is alredy in your contacts`, {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toastError(`${name} is already in your contacts`);
+
       return;
     } else if (
-      contacts?.some((contact) => contact.number.trim() === number.trim())
+      contacts?.some(contact => contact.number.trim() === number.trim())
     ) {
-      toast.error(`The number ${number} is alredy in your contacts`, {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toastError(`The number ${number} is already in your contacts`);
+
       return;
     }
     if (canSubmit) {
-      dispatch(addContact({ name, number }));
+      const result = await addContact({ name, number });
+      if (result.error) {
+        toastError(
+          'Oops... Something went wrong =(. Please, reload page and try again'
+        );
+      } else {
+        toastSuccess('Contact has been added to your book');
+      }
 
-      setName("");
-      setNumber("");
+      setName('');
+      setNumber('');
     }
   };
 
@@ -124,7 +127,7 @@ const AddContactForm = () => {
         )}
         Add contact
       </button>
-      <p className={`notify ${canSubmit ? "ok" : "error"}`}>{notify}</p>
+      <p className={`notify ${canSubmit ? 'ok' : 'error'}`}>{notify}</p>
     </AddContactFormStyle>
   );
 };

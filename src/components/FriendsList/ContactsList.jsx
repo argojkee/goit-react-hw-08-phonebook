@@ -1,13 +1,8 @@
 import ContactItem from './ContactItem';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ContactsListStyled from './ContactsListStyle.styled';
-import {
-  getContactsList,
-  getLoading,
-  getError,
-} from 'redux/contacts/contactsSlice';
+import { getLoading, getError } from 'redux/contacts/contactsSlice';
 import { getFilter } from 'redux/contacts/filterSlice';
-import { fetchContacts } from '../../redux/contacts/contactsOperations';
 import { useEffect } from 'react';
 import { getIsLoggedIn } from 'redux/auth/authSelectors';
 import EditContactModal from 'components/EditContactModal/EditContactModal';
@@ -17,11 +12,10 @@ import { ContactsContainerStyle } from './ContactsContainer.styled';
 import { GrFormNextLink, GrFormPreviousLink } from 'react-icons/gr';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
+import { useFetchContactsQuery } from '../../redux/baseApi';
 
 const ContactList = () => {
-  const contacts = useSelector(getContactsList);
   const filter = useSelector(getFilter);
-  const dispatch = useDispatch();
   const error = useSelector(getError);
   const isLoggedIn = useSelector(getIsLoggedIn);
   const context = useCustomContext();
@@ -31,6 +25,7 @@ const ContactList = () => {
   const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
+  const { data: contacts } = useFetchContactsQuery();
 
   useEffect(() => {
     setVisibleContacts(
@@ -55,7 +50,6 @@ const ContactList = () => {
     const firstPage = paginationList?.firstElementChild.nextSibling;
     const endOffset = itemOffset + itemsPerPage;
 
-    console.log(endOffset);
     if (endOffset === itemsPerPage) {
       firstPage?.classList.add('active');
     } else {
@@ -84,9 +78,9 @@ const ContactList = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(fetchContacts());
+      // fetchContacts();
     }
-  }, [dispatch, isLoggedIn]);
+  }, [isLoggedIn]);
 
   if (error) {
     return (
@@ -104,7 +98,7 @@ const ContactList = () => {
     );
   }
 
-  if (contacts.length === 0) {
+  if (contacts?.length === 0) {
     return (
       <ContactsContainerStyle>
         <h2 className="notification">
@@ -124,7 +118,7 @@ const ContactList = () => {
     );
   }
 
-  if (contacts.length > 0) {
+  if (contacts?.length > 0) {
     return (
       <ContactsContainerStyle>
         <ContactsListStyled>

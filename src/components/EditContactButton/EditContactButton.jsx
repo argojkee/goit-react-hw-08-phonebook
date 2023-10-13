@@ -1,5 +1,5 @@
-import { useCustomContext } from "context/userEditContext";
-import { FiEdit2 } from "react-icons/fi";
+import { useCustomContext } from 'context/userEditContext';
+import { FiEdit2 } from 'react-icons/fi';
 
 const EditContactButton = ({ id, name, number }) => {
   const { setId, isShowModal, setToggleShowModal, setName, setNumber } =

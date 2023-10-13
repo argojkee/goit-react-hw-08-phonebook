@@ -1,7 +1,7 @@
 import ContactItem from './ContactItem';
 import { useSelector } from 'react-redux';
 import ContactsListStyled from './ContactsListStyle.styled';
-import { getLoading, getError } from 'redux/contacts/contactsSlice';
+import { getError } from 'redux/contacts/contactsSlice';
 import { getFilter } from 'redux/contacts/filterSlice';
 import { useEffect } from 'react';
 import { getIsLoggedIn } from 'redux/auth/authSelectors';
@@ -19,13 +19,12 @@ const ContactList = () => {
   const error = useSelector(getError);
   const isLoggedIn = useSelector(getIsLoggedIn);
   const context = useCustomContext();
-  const loading = useSelector(getLoading);
   const [visibleContacts, setVisibleContacts] = useState([]);
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
-  const { data: contacts } = useFetchContactsQuery();
+  const { data: contacts, isLoading: loading } = useFetchContactsQuery();
 
   useEffect(() => {
     setVisibleContacts(

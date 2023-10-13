@@ -2,15 +2,13 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { PiSpinnerGap } from 'react-icons/pi';
-import { getDeleting } from 'redux/contacts/contactsSlice';
 import { useState } from 'react';
 import { useDeleteContactMutation } from 'redux/baseApi';
 import { toastSuccess, toastError } from 'toastNotification/toastNotification';
 
 const DeleteContactButton = ({ userId }) => {
-  const Deleting = useSelector(getDeleting);
   const [isCurrentButton, setIsCurrentButton] = useState(false);
-  const [deleteContact] = useDeleteContactMutation();
+  const [deleteContact, { isLoading: Deleting }] = useDeleteContactMutation();
 
   const handleDelete = async () => {
     setIsCurrentButton(true);

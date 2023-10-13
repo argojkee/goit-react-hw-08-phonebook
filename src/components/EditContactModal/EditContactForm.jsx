@@ -1,7 +1,7 @@
 import { useCustomContext } from 'context/userEditContext';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getContactsList, getIsEditing } from 'redux/contacts/contactsSlice';
+import { getContactsList } from 'redux/contacts/contactsSlice';
 import { EditContactFormStyle } from './EditContactFormStyle.styled';
 import { FiEdit2 } from 'react-icons/fi';
 import { PiSpinner } from 'react-icons/pi';
@@ -16,9 +16,8 @@ const EditContactForm = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState('');
   const contacts = useSelector(getContactsList);
-  const editing = useSelector(getIsEditing);
   const [onSubmitClick, setOnSubmitClick] = useState(false);
-  const [editContact] = useEditContactMutation();
+  const [editContact, { isLoading: editing }] = useEditContactMutation();
 
   const handleChange = e => {
     if (e.target.name === 'name') {

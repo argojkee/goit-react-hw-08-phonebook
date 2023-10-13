@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getContactsList, getIsAdding } from 'redux/contacts/contactsSlice';
+import { getContactsList } from 'redux/contacts/contactsSlice';
 import { useAddContactMutation } from 'redux/baseApi';
 import { PiSpinnerGap } from 'react-icons/pi';
 import AddContactFormStyle from './FormStyle.styled';
@@ -11,11 +11,9 @@ const AddContactForm = () => {
   const [number, setNumber] = useState('');
   const [name, setName] = useState('');
   const contacts = useSelector(getContactsList);
-  const isAdding = useSelector(getIsAdding);
   const [notify, setNotify] = useState('Please, enter contact info to add');
   const [canSubmit, setCanSubmit] = useState(false);
-  const [addContact] = useAddContactMutation();
-
+  const [addContact, { isLoading: isAdding }] = useAddContactMutation();
   const handlerChangeInput = ({ target }) => {
     if (target.name === 'name') {
       setName(target.value);

@@ -6,7 +6,6 @@ const initialState = {
   contacts: {
     contacts: [],
     error: null,
-    isEditing: false,
   },
 };
 

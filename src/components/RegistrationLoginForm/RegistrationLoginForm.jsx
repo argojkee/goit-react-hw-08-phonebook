@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsPending } from 'redux/auth/authSelectors';
 import { PiSpinnerGap } from 'react-icons/pi';
 import { MdAppRegistration } from 'react-icons/md';
 import { BiLogIn } from 'react-icons/bi';
@@ -13,10 +11,9 @@ const RegistrationLoginForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const isPending = useSelector(getIsPending);
   const location = useLocation();
   const [registration] = useRegisterMutation();
-  const [logIn] = useLogInMutation();
+  const [logIn, { isLoading: isPending }] = useLogInMutation();
 
   const isLoginPage = location.pathname === '/login';
 

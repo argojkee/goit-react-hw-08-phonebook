@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, lazy } from 'react';
 import PrivateRoute from './Routes/PrivateRoute/PrivateRoute';
 import PublicRoute from './Routes/PublicRoute/PublicRoute';
-import { getIsLoadingAuthUser, getToken } from 'redux/auth/authSelectors';
+import { getToken } from 'redux/auth/authSelectors';
 import { useFetchCurrentUserMutation } from 'redux/baseApi';
 
 const ContactsPage = lazy(() => import('../pages/ContactsPage'));
@@ -13,9 +13,9 @@ const RegistrationPage = lazy(() => import('../pages/RegistrationPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
 
 export const App = () => {
-  const isLoadingAuthUser = useSelector(getIsLoadingAuthUser);
   const token = useSelector(getToken);
-  const [fetchCurrentUser] = useFetchCurrentUserMutation();
+  const [fetchCurrentUser, { isLoading: isLoadingAuthUser }] =
+    useFetchCurrentUserMutation();
 
   useEffect(() => {
     if (token) {

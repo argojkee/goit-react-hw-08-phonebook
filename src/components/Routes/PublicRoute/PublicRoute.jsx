@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { getIsLoggedIn } from "redux/auth/authSelectors";
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { getToken } from 'redux/auth/authSelectors';
 
 const PublicRoute = ({ component: Component }) => {
-  const isLoggedIn = useSelector(getIsLoggedIn);
+  const token = useSelector(getToken);
 
-  return <>{isLoggedIn ? <Navigate to="/contacts" /> : <Component />}</>;
+  return <>{token ? <Navigate to="/contacts" /> : <Component />}</>;
 };
 
 export default PublicRoute;

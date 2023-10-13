@@ -1,4 +1,4 @@
-import { getUserEmail, getIsPending } from 'redux/auth/authSelectors';
+import { getUserEmail } from 'redux/auth/authSelectors';
 import { useSelector } from 'react-redux';
 import { PiSpinnerGap } from 'react-icons/pi';
 import { BiLogOut } from 'react-icons/bi';
@@ -7,9 +7,8 @@ import { useLogOutMutation } from 'redux/baseApi';
 import { toastSuccess } from 'toastNotification/toastNotification';
 
 const UserMenu = () => {
-  const isPending = useSelector(getIsPending);
   const userEmail = useSelector(getUserEmail);
-  const [logOut] = useLogOutMutation();
+  const [logOut, { isLoading: isPending }] = useLogOutMutation();
 
   const onLogOutClick = async () => {
     const result = await logOut();

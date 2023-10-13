@@ -4,7 +4,6 @@ import ContactsListStyled from './ContactsListStyle.styled';
 import { getError } from 'redux/contacts/contactsSlice';
 import { getFilter } from 'redux/contacts/filterSlice';
 import { useEffect } from 'react';
-import { getIsLoggedIn } from 'redux/auth/authSelectors';
 import EditContactModal from 'components/EditContactModal/EditContactModal';
 import { useCustomContext } from 'context/userEditContext';
 import MainSpinner from './MainSpinner';
@@ -17,7 +16,6 @@ import { useFetchContactsQuery } from '../../redux/baseApi';
 const ContactList = () => {
   const filter = useSelector(getFilter);
   const error = useSelector(getError);
-  const isLoggedIn = useSelector(getIsLoggedIn);
   const context = useCustomContext();
   const [visibleContacts, setVisibleContacts] = useState([]);
   const [currentItems, setCurrentItems] = useState(null);
@@ -74,12 +72,6 @@ const ContactList = () => {
 
     setItemOffset(newOffset);
   };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      // fetchContacts();
-    }
-  }, [isLoggedIn]);
 
   if (error) {
     return (

@@ -1,11 +1,12 @@
 import { useCustomContext } from "context/userEditContext";
 import { useEffect, useState } from "react";
-import { editContact } from "redux/contacts/contactsOperations";
-import { useDispatch, useSelector } from "react-redux";
-import { getContactsList, getIsEditing } from "redux/contacts/contactsSlice";
+import { useSelector } from "react-redux";
+import { getContactsList } from "redux/contacts/contactsSlice";
 import { EditContactFormStyle } from "./EditContactFormStyle.styled";
 import { FiEdit2 } from "react-icons/fi";
 import { PiSpinner } from "react-icons/pi";
+import { useEditContactMutation } from "redux/baseApi";
+import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
 const EditContactForm = () => {
   const { name, number, id, isShowModal, setToggleShowModal } =
@@ -15,11 +16,10 @@ const EditContactForm = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState("");
   const contacts = useSelector(getContactsList);
-  const editing = useSelector(getIsEditing);
   const [onSubmitClick, setOnSubmitClick] = useState(false);
-  const dispatch = useDispatch();
+  const [editContact, { isLoading: editing }] = useEditContactMutation();
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     if (e.target.name === "name") {
       setEditName(e.target.value);
     } else {
@@ -82,13 +82,25 @@ const EditContactForm = () => {
     }
   }, [contacts, editName, editNumber, id, name, number]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const sendingName = editName ? editName : name;
     const sendingNumber = editNumber ? editNumber : number;
 
-    dispatch(editContact({ id, name: sendingName, number: sendingNumber }));
+    const result = await editContact({
+      id,
+      name: sendingName,
+      number: sendingNumber,
+    });
+    if (result.error) {
+      toastError(
+        "Oops... Something went wrong =(. Please, reload page and try again"
+      );
+    } else {
+      toastSuccess("Contact has been edited. Thank you");
+    }
     setOnSubmitClick(true);
+    setToggleShowModal(!isShowModal);
   };
 
   useEffect(() => {

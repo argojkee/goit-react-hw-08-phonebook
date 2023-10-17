@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { getIsLoggedIn } from "redux/auth/authSelectors";
+import { getToken } from "redux/auth/authSelectors";
 import Navigation from "components/Navigation/Navigation";
 import UserMenu from "components/UserMenu/UserMenu";
 import AuthLinksList from "components/AuthLinksList/AuthLinksList";
@@ -7,13 +7,13 @@ import Container from "components/Container/Container";
 import { AppBarStyle } from "./AppBarStyle.styled";
 
 const AppBar = () => {
-  const isLoggedin = useSelector(getIsLoggedIn);
+  const token = useSelector(getToken);
   return (
     <AppBarStyle>
       <Container>
         <Navigation />
-        {!isLoggedin && <AuthLinksList />}
-        {isLoggedin && <UserMenu />}
+        {!token && <AuthLinksList />}
+        {token && <UserMenu />}
       </Container>
     </AppBarStyle>
   );

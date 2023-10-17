@@ -1,24 +1,27 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import Layout from "./Layout/Layout";
-import { useDispatch, useSelector } from "react-redux";
-import operations from "redux/auth/authOperations";
+import { useSelector } from "react-redux";
 import { useEffect, lazy } from "react";
 import PrivateRoute from "./Routes/PrivateRoute/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute/PublicRoute";
-import { getIsLoadingAuthUser } from "redux/auth/authSelectors";
+import { getToken } from "redux/auth/authSelectors";
+import { useFetchCurrentUserMutation } from "redux/baseApi";
 
 const ContactsPage = lazy(() => import("../pages/ContactsPage"));
 const RegistrationPage = lazy(() => import("../pages/RegistrationPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 
 export const App = () => {
-  const dispatch = useDispatch();
-  const isLoadingAuthUser = useSelector(getIsLoadingAuthUser);
+  const token = useSelector(getToken);
+  const [fetchCurrentUser, { isLoading: isLoadingAuthUser }] =
+    useFetchCurrentUserMutation();
 
   useEffect(() => {
-    dispatch(operations.fetchCurrentUser());
-  }, [dispatch]);
+    if (token) {
+      fetchCurrentUser();
+    }
+  }, [fetchCurrentUser, token]);
 
   return (
     !isLoadingAuthUser && (

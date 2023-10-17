@@ -1,20 +1,19 @@
 import { useState } from "react";
-import operations from "redux/auth/authOperations";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { getIsPending } from "redux/auth/authSelectors";
 import { PiSpinnerGap } from "react-icons/pi";
 import { MdAppRegistration } from "react-icons/md";
 import { BiLogIn } from "react-icons/bi";
 import { RegistrationLoginFormStyle } from "./RegistrationLoginFormStyle";
+import { useRegisterMutation, useLogInMutation } from "redux/baseApi";
+import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
 const RegistrationLoginForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const isPending = useSelector(getIsPending);
-  const dispatch = useDispatch();
   const location = useLocation();
+  const [registration] = useRegisterMutation();
+  const [logIn, { isLoading: isPending }] = useLogInMutation();
 
   const isLoginPage = location.pathname === "/login";
 
@@ -36,16 +35,30 @@ const RegistrationLoginForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (isLoginPage) {
       if (email && password) {
-        dispatch(operations.logIn({ email, password }));
+        const result = await logIn({ password, email });
+
+        if (result.error) {
+          toastError(
+            "Not valid email or password. Please, try again or register new account"
+          );
+        } else {
+          toastSuccess("Log in successfull. Welcome back to your phone book");
+        }
       }
     } else {
       if (name && email && password) {
-        dispatch(operations.register({ name, email, password }));
+        const result = await registration({ name, email, password });
+
+        if (result.error) {
+          toastError("Something went wrong. Please try again or log in");
+        } else {
+          toastSuccess("Registration succesfull. Welcome to phone book");
+        }
       }
     }
   };

@@ -1,18 +1,18 @@
 import { useSelector } from "react-redux";
-import { getIsLoggedIn, getUserName } from "redux/auth/authSelectors";
+import { getUserName, getToken } from "redux/auth/authSelectors";
 import Container from "components/Container/Container";
 import { HomePageStyle } from "./pageStyles/HomePageStyle";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-  const isLoggedIn = useSelector(getIsLoggedIn);
   const userName = useSelector(getUserName);
+  const token = useSelector(getToken);
 
   return (
     <HomePageStyle>
       <Container>
         <h1>Contacts book</h1>
-        {isLoggedIn ? (
+        {token ? (
           <h2>
             Hello <span className="name">{userName} </span>, enter to your{" "}
             <Link className="link" to="/contacts">

@@ -1,21 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import { deleteContact } from 'redux/contacts/contactsOperations';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { PiSpinnerGap } from 'react-icons/pi';
-import { getDeleting } from 'redux/contacts/contactsSlice';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { PiSpinnerGap } from "react-icons/pi";
+import { useState } from "react";
+import { useDeleteContactMutation } from "redux/baseApi";
+import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
 const DeleteContactButton = ({ userId }) => {
-  const dispatch = useDispatch();
-  const Deleting = useSelector(getDeleting);
   const [isCurrentButton, setIsCurrentButton] = useState(false);
+  const [deleteContact, { isLoading: Deleting }] = useDeleteContactMutation();
 
-  const handleDelete = e => {
+  const handleDelete = async () => {
     setIsCurrentButton(true);
-    dispatch(deleteContact(userId)).finally(() => {
-      setIsCurrentButton(false);
-    });
+    const result = await deleteContact(userId);
+
+    if (result.error) {
+      toastError(
+        "Oops... Something went wrong =(. Please, reload page and try again"
+      );
+    } else {
+      toastSuccess("Contacts has been deleted from your book");
+    }
+
+    setIsCurrentButton(false);
   };
 
   return (

@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getContactsList, getIsAdding } from "redux/contacts/contactsSlice";
-import { addContact } from "redux/contacts/contactsOperations";
+import { useSelector } from "react-redux";
+import { getContactsList } from "redux/contacts/contactsSlice";
+import { useAddContactMutation } from "redux/baseApi";
 import { PiSpinnerGap } from "react-icons/pi";
 import AddContactFormStyle from "./FormStyle.styled";
-import { toast } from "react-toastify";
 import { GrAdd } from "react-icons/gr";
+import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
 const AddContactForm = () => {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
   const contacts = useSelector(getContactsList);
-  const isAdding = useSelector(getIsAdding);
   const [notify, setNotify] = useState("Please, enter contact info to add");
   const [canSubmit, setCanSubmit] = useState(false);
-  const dispatch = useDispatch();
-
+  const [addContact, { isLoading: isAdding }] = useAddContactMutation();
   const handlerChangeInput = ({ target }) => {
     if (target.name === "name") {
       setName(target.value);
@@ -52,30 +50,33 @@ const AddContactForm = () => {
     }
   }, [name, number]);
 
-  const handlerSubmitForm = (e) => {
+  const handlerSubmitForm = async e => {
     e.preventDefault();
 
     if (
       contacts?.some(
-        (contact) => contact.name.toLowerCase() === name.toLowerCase()
+        contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      toast.error(`${name} is alredy in your contacts`, {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toastError(`${name} is already in your contacts`);
+
       return;
     } else if (
-      contacts?.some((contact) => contact.number.trim() === number.trim())
+      contacts?.some(contact => contact.number.trim() === number.trim())
     ) {
-      toast.error(`The number ${number} is alredy in your contacts`, {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toastError(`The number ${number} is already in your contacts`);
+
       return;
     }
     if (canSubmit) {
-      dispatch(addContact({ name, number }));
+      const result = await addContact({ name, number });
+      if (result.error) {
+        toastError(
+          "Oops... Something went wrong =(. Please, reload page and try again"
+        );
+      } else {
+        toastSuccess("Contact has been added to your book");
+      }
 
       setName("");
       setNumber("");

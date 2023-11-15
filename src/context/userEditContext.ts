@@ -1,12 +1,28 @@
 import React, { useState, useContext } from "react";
 
-const UserEditContext = React.createContext();
+interface UserContextType {
+  id: string | null;
+  name: string;
+  number: string;
+  setId: React.Dispatch<React.SetStateAction<string>>;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  setNumber: React.Dispatch<React.SetStateAction<string>>;
+  isShowModal: boolean;
+}
+
+const UserEditContext = React.createContext<UserContextType | undefined>(
+  undefined
+);
+
+type Props = {
+  children: React.ReactNode;
+};
 
 export const useCustomContext = () => {
   return useContext(UserEditContext);
 };
 
-export const Context = ({ children }) => {
+export const Context = ({ children }: Props) => {
   const [isShowModal, setToggleShowModal] = useState(false);
   const [id, setId] = useState(null);
   const [name, setName] = useState("");

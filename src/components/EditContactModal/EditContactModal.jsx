@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useCustomContext } from "context/userEditContext";
+import useCustomContext from "context/userEditContext";
 import EditModalStyled from "./EditContactModal.styled";
 import EditContactForm from "./EditContactForm";
 import { useEffect } from "react";
@@ -30,7 +30,7 @@ const EditContactModal = () => {
     };
   }, [isShowModal, setToggleShowModal]);
 
-  const onBackdrop = (e) => {
+  const onBackdrop = e => {
     if (e.target !== e.currentTarget) {
       return;
     }

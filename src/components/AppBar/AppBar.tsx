@@ -7,7 +7,7 @@ import Container from "components/Container/Container";
 import { AppBarStyle } from "./AppBarStyle.styled";
 
 const AppBar = () => {
-  const token = useSelector(getToken);
+  const token: string = useSelector(getToken);
   return (
     <AppBarStyle>
       <Container>

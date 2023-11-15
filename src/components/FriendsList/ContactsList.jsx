@@ -1,16 +1,16 @@
-import ContactItem from './ContactItem';
-import { useSelector } from 'react-redux';
-import ContactsListStyled from './ContactsListStyle.styled';
-import { getFilter } from 'redux/contacts/filterSlice';
-import { useEffect } from 'react';
-import EditContactModal from 'components/EditContactModal/EditContactModal';
-import { useCustomContext } from 'context/userEditContext';
-import MainSpinner from './MainSpinner';
-import { ContactsContainerStyle } from './ContactsContainer.styled';
-import { GrFormNextLink, GrFormPreviousLink } from 'react-icons/gr';
-import ReactPaginate from 'react-paginate';
-import { useState } from 'react';
-import { useFetchContactsQuery } from '../../redux/baseApi';
+import ContactItem from "./ContactItem";
+import { useSelector } from "react-redux";
+import ContactsListStyled from "./ContactsListStyle.styled";
+import { getFilter } from "redux/contacts/filterSlice";
+import { useEffect } from "react";
+import EditContactModal from "components/EditContactModal/EditContactModal";
+import useCustomContext from "context/userEditContext";
+import MainSpinner from "./MainSpinner";
+import { ContactsContainerStyle } from "./ContactsContainer.styled";
+import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
+import ReactPaginate from "react-paginate";
+import { useState } from "react";
+import { useFetchContactsQuery } from "../../redux/baseApi";
 
 const ContactList = () => {
   const filter = useSelector(getFilter);
@@ -45,14 +45,14 @@ const ContactList = () => {
   }, [contacts, filter]);
 
   useEffect(() => {
-    const paginationList = document.querySelector('.pagination-list');
+    const paginationList = document.querySelector(".pagination-list");
     const firstPage = paginationList?.firstElementChild.nextSibling;
     const endOffset = itemOffset + itemsPerPage;
 
     if (endOffset === itemsPerPage) {
-      firstPage?.classList.add('active');
+      firstPage?.classList.add("active");
     } else {
-      firstPage?.classList.remove('active');
+      firstPage?.classList.remove("active");
     }
 
     setCurrentItems(visibleContacts?.slice(itemOffset, endOffset));
@@ -65,7 +65,7 @@ const ContactList = () => {
         Math.ceil(visibleContacts?.length / itemsPerPage) * itemsPerPage
     ) {
       setItemOffset(0);
-      firstPage?.classList.add('active');
+      firstPage?.classList.add("active");
     }
   }, [itemOffset, itemsPerPage, visibleContacts]);
 

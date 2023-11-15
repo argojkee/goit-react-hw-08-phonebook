@@ -5,7 +5,11 @@ import { useState } from "react";
 import { useDeleteContactMutation } from "redux/baseApi";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
-const DeleteContactButton = ({ userId }) => {
+type Props = {
+  userId: string;
+};
+
+const DeleteContactButton = ({ userId }: Props) => {
   const [isCurrentButton, setIsCurrentButton] = useState(false);
   const [deleteContact, { isLoading: Deleting }] = useDeleteContactMutation();
 

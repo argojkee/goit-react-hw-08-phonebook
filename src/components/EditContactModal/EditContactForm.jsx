@@ -1,4 +1,4 @@
-import { useCustomContext } from "context/userEditContext";
+import useCustomContext from "context/userEditContext";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getContactsList } from "redux/contacts/contactsSlice";

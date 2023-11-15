@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getContactsList } from "redux/contacts/contactsSlice";
 import { useAddContactMutation } from "redux/baseApi";
@@ -6,15 +6,18 @@ import { PiSpinnerGap } from "react-icons/pi";
 import AddContactFormStyle from "./FormStyle.styled";
 import { GrAdd } from "react-icons/gr";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
+import { Contact } from "../../types/types";
 
 const AddContactForm = () => {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-  const contacts = useSelector(getContactsList);
+  const contacts: Contact[] = useSelector(getContactsList);
   const [notify, setNotify] = useState("Please, enter contact info to add");
   const [canSubmit, setCanSubmit] = useState(false);
   const [addContact, { isLoading: isAdding }] = useAddContactMutation();
-  const handlerChangeInput = ({ target }) => {
+  const handlerChangeInput = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.name === "name") {
       setName(target.value);
     } else {
@@ -50,7 +53,7 @@ const AddContactForm = () => {
     }
   }, [name, number]);
 
-  const handlerSubmitForm = async e => {
+  const handlerSubmitForm = async (e: FormEvent) => {
     e.preventDefault();
 
     if (

@@ -1,5 +1,5 @@
 import ContactItem from './ContactItem';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../redux/hooks';
 import ContactsListStyled from './ContactsListStyle.styled';
 import { getFilter } from 'redux/contacts/filterSlice';
 import { useEffect } from 'react';
@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { useFetchContactsQuery } from '../../redux/baseApi';
 
 const ContactList = () => {
-  const filter = useSelector(getFilter);
+  const filter = useAppSelector(getFilter);
   const context = useCustomContext();
   const [visibleContacts, setVisibleContacts] = useState([]);
   const [currentItems, setCurrentItems] = useState(null);

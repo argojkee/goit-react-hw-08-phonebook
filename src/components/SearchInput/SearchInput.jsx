@@ -1,11 +1,12 @@
 import { changeFilterValue, getFilter } from "redux/contacts/filterSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector } from "../../redux/hooks";
 import { SearchInputStyle } from "./SearchinputStyle";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useAppDispatch } from "../../redux/hooks";
 
 const SearchInput = () => {
-  const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
+  const dispatch = useAppDispatch();
+  const filter = useAppSelector(getFilter);
 
   return (
     <SearchInputStyle>

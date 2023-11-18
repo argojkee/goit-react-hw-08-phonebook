@@ -1,11 +1,11 @@
 import { useCustomContext } from "context/userEditContext";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getContactsList } from "redux/contacts/contactsSlice";
+// import { useSelector } from "react-redux";
+// import { getContactsList } from "redux/contacts/contactsSlice";
 import { EditContactFormStyle } from "./EditContactFormStyle.styled";
 import { FiEdit2 } from "react-icons/fi";
 import { PiSpinner } from "react-icons/pi";
-import { useEditContactMutation } from "redux/baseApi";
+import { useEditContactMutation, useFetchContactsQuery } from "redux/baseApi";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
 const EditContactForm = () => {
@@ -15,7 +15,8 @@ const EditContactForm = () => {
   const [editNumber, setEditNumber] = useState("");
   const [canSubmit, setCanSubmit] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState("");
-  const contacts = useSelector(getContactsList);
+  // const contacts = useSelector(getContactsList);
+  const { data: contacts } = useFetchContactsQuery();
   const [onSubmitClick, setOnSubmitClick] = useState(false);
   const [editContact, { isLoading: editing }] = useEditContactMutation();
 

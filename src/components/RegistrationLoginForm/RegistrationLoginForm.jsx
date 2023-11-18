@@ -6,6 +6,8 @@ import { BiLogIn } from "react-icons/bi";
 import { RegistrationLoginFormStyle } from "./RegistrationLoginFormStyle";
 import { useRegisterMutation, useLogInMutation } from "redux/baseApi";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
+import { setToken, setUser } from "../../redux/auth/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const RegistrationLoginForm = () => {
   const [name, setName] = useState("");
@@ -14,6 +16,7 @@ const RegistrationLoginForm = () => {
   const location = useLocation();
   const [registration] = useRegisterMutation();
   const [logIn, { isLoading: isPending }] = useLogInMutation();
+  const dispatch = useAppDispatch();
 
   const isLoginPage = location.pathname === "/login";
 
@@ -41,7 +44,9 @@ const RegistrationLoginForm = () => {
     if (isLoginPage) {
       if (email && password) {
         const result = await logIn({ password, email });
-
+        console.log(result);
+        dispatch(setToken(result.data.token));
+        dispatch(setUser(result.data.user));
         if (result.error) {
           toastError(
             "Not valid email or password. Please, try again or register new account"
@@ -53,6 +58,8 @@ const RegistrationLoginForm = () => {
     } else {
       if (name && email && password) {
         const result = await registration({ name, email, password });
+        dispatch(setToken(result.data.token));
+        dispatch(setUser(result.data.user));
 
         if (result.error) {
           toastError("Something went wrong. Please try again or log in");

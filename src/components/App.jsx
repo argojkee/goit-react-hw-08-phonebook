@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import Layout from "./Layout/Layout";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../redux/hooks";
 import { useEffect, lazy } from "react";
 import PrivateRoute from "./Routes/PrivateRoute/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute/PublicRoute";
@@ -13,7 +13,7 @@ const RegistrationPage = lazy(() => import("../pages/RegistrationPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 
 export const App = () => {
-  const token = useSelector(getToken);
+  const token = useAppSelector(getToken);
   const [fetchCurrentUser, { isLoading: isLoadingAuthUser }] =
     useFetchCurrentUserMutation();
 

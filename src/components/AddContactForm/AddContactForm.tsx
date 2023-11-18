@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getContactsList } from "redux/contacts/contactsSlice";
-import { useAddContactMutation } from "redux/baseApi";
+// import { useSelector } from "react-redux";
+// import { getContactsList } from "redux/contacts/contactsSlice";
+import { useAddContactMutation, useFetchContactsQuery } from "redux/baseApi";
 import { PiSpinnerGap } from "react-icons/pi";
 import AddContactFormStyle from "./FormStyle.styled";
 import { GrAdd } from "react-icons/gr";
@@ -10,10 +10,12 @@ import { toastSuccess, toastError } from "toastNotification/toastNotification";
 const AddContactForm = () => {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-  const contacts = useSelector(getContactsList);
+  // const contacts = useSelector(getContactsList);
+  const { data: contacts } = useFetchContactsQuery();
   const [notify, setNotify] = useState("Please, enter contact info to add");
   const [canSubmit, setCanSubmit] = useState(false);
-  const [addContact, { isLoading: isAdding }] = useAddContactMutation();
+  const [addContact, { isLoading: isAdding, isError }] =
+    useAddContactMutation();
   const handlerChangeInput = ({ target }) => {
     if (target.name === "name") {
       setName(target.value);
@@ -69,8 +71,8 @@ const AddContactForm = () => {
       return;
     }
     if (canSubmit) {
-      const result = await addContact({ name, number });
-      if (result.error) {
+      await addContact({ name, number });
+      if (isError) {
         toastError(
           "Oops... Something went wrong =(. Please, reload page and try again"
         );

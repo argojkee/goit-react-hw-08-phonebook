@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../redux/hooks';
 import { getToken } from 'redux/auth/authSelectors';
 import { AiFillHome } from 'react-icons/ai';
 import { RiContactsBook2Line } from 'react-icons/ri';
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const Navigation = () => {
   const { pathname } = useLocation();
-  const token = useSelector(getToken);
+  const token = useAppSelector(getToken);
   const [currentPage, setCurrentPage] = useState('');
 
   useEffect(() => {

@@ -1,28 +1,28 @@
 import DeleteContactButton from "components/DeleteContactButton/DeleteContactButton";
-import PropTypes from "prop-types";
 import EditContactButton from "components/EditContactButton/EditContactButton";
 import { ContactItemStyle } from "./ContactsItemStyle.styled";
 import { IoMdCall } from "react-icons/io";
+import { Contact } from "types";
 
-const ContactItem = ({ userName, userNumber, id }) => {
+const ContactItem = ({ name, number, id }: Contact) => {
   return (
     <ContactItemStyle id={id}>
       <div className="user-container">
-        <p className="name">{userName}</p>
-        <p className="number">{userNumber}</p>
+        <p className="name">{name}</p>
+        <p className="number">{number}</p>
       </div>
 
       <ul className="buttons-list">
         <li>
           <a
             className="button-item phone"
-            href={`tel:${userNumber.replace("-", "").replace(" ", "")}`}
+            href={`tel:${number.replace("-", "").replace(" ", "")}`}
           >
             <IoMdCall size={20} />
           </a>
         </li>
         <li>
-          <EditContactButton id={id} name={userName} number={userNumber} />
+          <EditContactButton id={id} name={name} number={number} />
         </li>
         <li>
           <DeleteContactButton userId={id} />
@@ -33,9 +33,3 @@ const ContactItem = ({ userName, userNumber, id }) => {
 };
 
 export default ContactItem;
-
-ContactItem.propTypes = {
-  userName: PropTypes.string,
-  userNumber: PropTypes.string,
-  id: PropTypes.string,
-};

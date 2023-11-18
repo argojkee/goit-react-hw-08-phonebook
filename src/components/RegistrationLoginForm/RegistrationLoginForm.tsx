@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { PiSpinnerGap } from "react-icons/pi";
 import { MdAppRegistration } from "react-icons/md";
@@ -10,17 +10,21 @@ import { setToken, setUser } from "../../redux/auth/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
 const RegistrationLoginForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const location = useLocation();
-  const [registration] = useRegisterMutation();
-  const [logIn, { isLoading: isPending }] = useLogInMutation();
+  const [
+    registration,
+    { isLoading: isRegisterLoading, isError: isRegisterError },
+  ] = useRegisterMutation();
+  const [logIn, { isLoading: isLoginLoading, isError: isLoginError }] =
+    useLogInMutation();
   const dispatch = useAppDispatch();
 
   const isLoginPage = location.pathname === "/login";
 
-  const handleChange = ({ target }) => {
+  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (isLoginPage) {
       if (target.name === "email") {
         setEmail(target.value);
@@ -38,16 +42,21 @@ const RegistrationLoginForm = () => {
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (isLoginPage) {
       if (email && password) {
-        const result = await logIn({ password, email });
-        console.log(result);
-        dispatch(setToken(result.data.token));
-        dispatch(setUser(result.data.user));
-        if (result.error) {
+        logIn({ password, email })
+          .unwrap()
+          .then(resp => {
+            console.log(resp);
+
+            dispatch(setToken(resp.token));
+            dispatch(setUser(resp.user));
+          });
+
+        if (isLoginError) {
           toastError(
             "Not valid email or password. Please, try again or register new account"
           );
@@ -57,11 +66,14 @@ const RegistrationLoginForm = () => {
       }
     } else {
       if (name && email && password) {
-        const result = await registration({ name, email, password });
-        dispatch(setToken(result.data.token));
-        dispatch(setUser(result.data.user));
+        registration({ name, email, password })
+          .unwrap()
+          .then(resp => {
+            dispatch(setToken(resp.token));
+            dispatch(setUser(resp.user));
+          });
 
-        if (result.error) {
+        if (isRegisterError) {
           toastError("Something went wrong. Please try again or log in");
         } else {
           toastSuccess("Registration succesfull. Welcome to phone book");
@@ -124,7 +136,7 @@ const RegistrationLoginForm = () => {
           }
           type="submit"
         >
-          {isPending ? (
+          {isRegisterLoading || isLoginLoading ? (
             <PiSpinnerGap className="spinner" size={16} />
           ) : isLoginPage ? (
             <BiLogIn size={16} />

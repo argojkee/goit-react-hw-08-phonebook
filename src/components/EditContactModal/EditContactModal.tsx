@@ -11,7 +11,7 @@ const EditContactModal = () => {
   const { name, number, isShowModal, setToggleShowModal } = useCustomContext();
 
   useEffect(() => {
-    function onEsc(e) {
+    function onEsc(e: KeyboardEvent) {
       if (e.code !== "Escape") {
         return;
       }
@@ -26,11 +26,11 @@ const EditContactModal = () => {
     return () => {
       window.removeEventListener("keydown", onEsc);
       document.body.style.overflow = "auto";
-      document.body.style.paddingRight = 0;
+      document.body.style.paddingRight = "0px";
     };
   }, [isShowModal, setToggleShowModal]);
 
-  const onBackdrop = (e) => {
+  const onBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) {
       return;
     }

@@ -1,22 +1,22 @@
-import ContactItem from './ContactItem';
-import { useAppSelector } from '../../redux/hooks';
-import ContactsListStyled from './ContactsListStyle.styled';
-import { getFilter } from 'redux/contacts/filterSlice';
-import { useEffect } from 'react';
-import EditContactModal from 'components/EditContactModal/EditContactModal';
-import { useCustomContext } from 'context/userEditContext';
-import MainSpinner from './MainSpinner';
-import { ContactsContainerStyle } from './ContactsContainer.styled';
-import { GrFormNextLink, GrFormPreviousLink } from 'react-icons/gr';
-import ReactPaginate from 'react-paginate';
-import { useState } from 'react';
-import { useFetchContactsQuery } from '../../redux/baseApi';
+import ContactItem from "./ContactItem";
+import { useAppSelector } from "../../redux/hooks";
+import ContactsListStyled from "./ContactsListStyle.styled";
+import { getFilter } from "redux/contacts/filterSlice";
+import { useEffect } from "react";
+import EditContactModal from "components/EditContactModal/EditContactModal";
+import { useCustomContext } from "context/userEditContext";
+import MainSpinner from "./MainSpinner";
+import { ContactsContainerStyle } from "./ContactsContainer.styled";
+import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
+import ReactPaginate from "react-paginate";
+import { useState } from "react";
+import { useFetchContactsQuery } from "../../redux/baseApi";
 
 const ContactList = () => {
   const filter = useAppSelector(getFilter);
   const context = useCustomContext();
-  const [visibleContacts, setVisibleContacts] = useState([]);
-  const [currentItems, setCurrentItems] = useState(null);
+  const [filteredContacts, setFilteredContacts] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
@@ -27,7 +27,7 @@ const ContactList = () => {
   } = useFetchContactsQuery();
 
   useEffect(() => {
-    setVisibleContacts(
+    setFilteredContacts(
       contacts
         ? [
             ...contacts
@@ -45,32 +45,33 @@ const ContactList = () => {
   }, [contacts, filter]);
 
   useEffect(() => {
-    const paginationList = document.querySelector('.pagination-list');
+    const paginationList = document.querySelector(".pagination-list");
     const firstPage = paginationList?.firstElementChild.nextSibling;
     const endOffset = itemOffset + itemsPerPage;
 
     if (endOffset === itemsPerPage) {
-      firstPage?.classList.add('active');
+      firstPage?.classList.add("active");
     } else {
-      firstPage?.classList.remove('active');
+      firstPage?.classList.remove("active");
     }
 
-    setCurrentItems(visibleContacts?.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(visibleContacts?.length / itemsPerPage));
+    setCurrentItems(filteredContacts?.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(filteredContacts?.length / itemsPerPage));
 
     if (
-      visibleContacts.length <=
-        Math.ceil(visibleContacts?.length / itemsPerPage) * itemsPerPage &&
+      filteredContacts.length <=
+        Math.ceil(filteredContacts?.length / itemsPerPage) * itemsPerPage &&
       itemOffset ===
-        Math.ceil(visibleContacts?.length / itemsPerPage) * itemsPerPage
+        Math.ceil(filteredContacts?.length / itemsPerPage) * itemsPerPage
     ) {
       setItemOffset(0);
-      firstPage?.classList.add('active');
+      firstPage?.classList.add("active");
     }
-  }, [itemOffset, itemsPerPage, visibleContacts]);
+  }, [itemOffset, itemsPerPage, filteredContacts]);
 
   const handlePageClick = event => {
-    const newOffset = (event.selected * itemsPerPage) % visibleContacts?.length;
+    const newOffset =
+      (event.selected * itemsPerPage) % filteredContacts?.length;
 
     setItemOffset(newOffset);
   };
@@ -104,7 +105,7 @@ const ContactList = () => {
     );
   }
 
-  if (filter && visibleContacts.length === 0) {
+  if (filter && filteredContacts.length === 0) {
     return (
       <ContactsContainerStyle>
         <h2 className="notification">
@@ -121,14 +122,14 @@ const ContactList = () => {
           {context.isShowModal && <EditContactModal />}
           {currentItems?.map(contact => (
             <ContactItem
-              userName={contact.name}
-              userNumber={contact.number}
+              name={contact.name}
+              number={contact.number}
               id={contact.id}
               key={contact.id}
             />
           ))}
         </ContactsListStyled>
-        {visibleContacts.length > itemsPerPage && (
+        {filteredContacts.length > itemsPerPage && (
           <ReactPaginate
             className="pagination-list pagination"
             nextLabel={<GrFormNextLink size={16} />}

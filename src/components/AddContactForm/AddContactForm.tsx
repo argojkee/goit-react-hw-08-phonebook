@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 // import { getContactsList } from "redux/contacts/contactsSlice";
 import { useAddContactMutation, useFetchContactsQuery } from "redux/baseApi";
@@ -8,15 +8,20 @@ import { GrAdd } from "react-icons/gr";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
 
 const AddContactForm = () => {
-  const [number, setNumber] = useState("");
-  const [name, setName] = useState("");
+  const [number, setNumber] = useState<string>("");
+  const [name, setName] = useState<string>("");
   // const contacts = useSelector(getContactsList);
   const { data: contacts } = useFetchContactsQuery();
-  const [notify, setNotify] = useState("Please, enter contact info to add");
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [notify, setNotify] = useState<string>(
+    "Please, enter contact info to add"
+  );
+  const [canSubmit, setCanSubmit] = useState<boolean>(false);
   const [addContact, { isLoading: isAdding, isError }] =
     useAddContactMutation();
-  const handlerChangeInput = ({ target }) => {
+
+  const handlerChangeInput = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.name === "name") {
       setName(target.value);
     } else {
@@ -52,7 +57,7 @@ const AddContactForm = () => {
     }
   }, [name, number]);
 
-  const handlerSubmitForm = async e => {
+  const handlerSubmitForm = async (e: FormEvent) => {
     e.preventDefault();
 
     if (

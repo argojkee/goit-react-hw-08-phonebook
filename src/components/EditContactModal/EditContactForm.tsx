@@ -1,5 +1,5 @@
 import { useCustomContext } from "context/userEditContext";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 // import { getContactsList } from "redux/contacts/contactsSlice";
 import { EditContactFormStyle } from "./EditContactFormStyle.styled";
@@ -11,16 +11,17 @@ import { toastSuccess, toastError } from "toastNotification/toastNotification";
 const EditContactForm = () => {
   const { name, number, id, isShowModal, setToggleShowModal } =
     useCustomContext();
-  const [editName, setEditName] = useState("");
-  const [editNumber, setEditNumber] = useState("");
-  const [canSubmit, setCanSubmit] = useState(false);
-  const [invalidMessage, setInvalidMessage] = useState("");
+  const [editName, setEditName] = useState<string>("");
+  const [editNumber, setEditNumber] = useState<string>("");
+  const [canSubmit, setCanSubmit] = useState<boolean>(false);
+  const [invalidMessage, setInvalidMessage] = useState<string>("");
   // const contacts = useSelector(getContactsList);
   const { data: contacts } = useFetchContactsQuery();
-  const [onSubmitClick, setOnSubmitClick] = useState(false);
-  const [editContact, { isLoading: editing }] = useEditContactMutation();
+  const [onSubmitClick, setOnSubmitClick] = useState<boolean>(false);
+  const [editContact, { isLoading: editing, isError }] =
+    useEditContactMutation();
 
-  const handleChange = e => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === "name") {
       setEditName(e.target.value);
     } else {
@@ -83,17 +84,17 @@ const EditContactForm = () => {
     }
   }, [contacts, editName, editNumber, id, name, number]);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const sendingName = editName ? editName : name;
     const sendingNumber = editNumber ? editNumber : number;
 
-    const result = await editContact({
+    await editContact({
       id,
       name: sendingName,
       number: sendingNumber,
     });
-    if (result.error) {
+    if (isError) {
       toastError(
         "Oops... Something went wrong =(. Please, reload page and try again"
       );

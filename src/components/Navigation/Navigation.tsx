@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 const Navigation = () => {
   const { pathname } = useLocation();
   const token = useAppSelector(getToken);
-  const [currentPage, setCurrentPage] = useState('');
+  const [currentPage, setCurrentPage] = useState<string>('');
 
   useEffect(() => {
     if (pathname === '/') {

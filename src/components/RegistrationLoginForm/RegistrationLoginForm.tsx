@@ -6,7 +6,7 @@ import { BiLogIn } from "react-icons/bi";
 import { RegistrationLoginFormStyle } from "./RegistrationLoginFormStyle.styled";
 import { useRegisterMutation, useLogInMutation } from "redux/baseApi";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
-import { setToken, setUser } from "../../redux/auth/authSlice";
+import { setUser } from "../../redux/auth/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
 const RegistrationLoginForm = () => {
@@ -50,8 +50,12 @@ const RegistrationLoginForm = () => {
         logIn({ password, email })
           .unwrap()
           .then(resp => {
-            dispatch(setToken(resp.token));
-            dispatch(setUser(resp.user));
+            dispatch(
+              setUser({
+                user: resp.user,
+                token: resp.token,
+              })
+            );
           });
 
         if (isLoginError) {
@@ -67,8 +71,12 @@ const RegistrationLoginForm = () => {
         registration({ name, email, password })
           .unwrap()
           .then(resp => {
-            dispatch(setToken(resp.token));
-            dispatch(setUser(resp.user));
+            dispatch(
+              setUser({
+                user: resp.user,
+                token: resp.token,
+              })
+            );
           });
 
         if (isRegisterError) {

@@ -7,7 +7,7 @@ import PrivateRoute from "./Routes/PrivateRoute/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute/PublicRoute";
 import { getToken } from "redux/auth/authSelectors";
 import { useFetchCurrentUserMutation } from "redux/baseApi";
-import { resetToken, resetUser, setUser } from "redux/auth/authSlice";
+import { resetUser, setUser } from "redux/auth/authSlice";
 import { useAppDispatch } from "../redux/hooks";
 
 const ContactsPage = lazy(() => import("../pages/ContactsPage"));
@@ -25,10 +25,14 @@ export const App = () => {
       fetchCurrentUser()
         .unwrap()
         .then(resp => {
-          dispatch(setUser(resp));
+          dispatch(
+            setUser({
+              user: resp,
+              token,
+            })
+          );
         })
         .catch(err => {
-          dispatch(resetToken());
           dispatch(resetUser());
         });
     }

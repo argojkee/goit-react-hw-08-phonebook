@@ -18,28 +18,32 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => {
-      return {
-        ...state,
-        token: action.payload,
-      };
-    },
-    resetToken: state => {
-      return {
-        ...state,
-        token: null,
-      };
-    },
+    // setToken: (state, action: PayloadAction<string>) => {
+    //   return {
+    //     ...state,
+    //     token: action.payload,
+    //   };
+    // },
+    // resetToken: state => {
+    //   return {
+    //     ...state,
+    //     token: null,
+    //   };
+    // },
     setUser: (
       state,
       action: PayloadAction<{
-        name: string;
-        email: string;
+        user: {
+          name: string;
+          email: string;
+        };
+        token: string;
       }>
     ) => {
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
+        token: action.payload.token,
       };
     },
 
@@ -50,6 +54,7 @@ const authSlice = createSlice({
           name: null,
           email: null,
         },
+        token: null,
       };
     },
   },
@@ -87,5 +92,5 @@ const authSlice = createSlice({
   // },
 });
 
-export const { setToken, resetToken, setUser, resetUser } = authSlice.actions;
+export const { setUser, resetUser } = authSlice.actions;
 export default authSlice.reducer;

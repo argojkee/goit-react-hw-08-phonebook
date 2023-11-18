@@ -1,6 +1,6 @@
 import Container from "components/Container/Container";
 import RegistrationLoginForm from "components/RegistrationLoginForm/RegistrationLoginForm";
-import { RegistrationLoginPageStyle } from "./pageStyles/RegistrationLoginPageStyle";
+import { RegistrationLoginPageStyle } from "./pageStyles/RegistrationLoginPageStyle.styled";
 const LoginPage = () => {
   return (
     <RegistrationLoginPageStyle>

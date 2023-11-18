@@ -7,6 +7,8 @@ import PrivateRoute from "./Routes/PrivateRoute/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute/PublicRoute";
 import { getToken } from "redux/auth/authSelectors";
 import { useFetchCurrentUserMutation } from "redux/baseApi";
+import { resetToken, resetUser, setUser } from "redux/auth/authSlice";
+import { useAppDispatch } from "../redux/hooks";
 
 const ContactsPage = lazy(() => import("../pages/ContactsPage"));
 const RegistrationPage = lazy(() => import("../pages/RegistrationPage"));
@@ -14,14 +16,23 @@ const LoginPage = lazy(() => import("../pages/LoginPage"));
 
 export const App = () => {
   const token = useAppSelector(getToken);
+  const dispatch = useAppDispatch();
   const [fetchCurrentUser, { isLoading: isLoadingAuthUser }] =
     useFetchCurrentUserMutation();
 
   useEffect(() => {
     if (token) {
-      fetchCurrentUser();
+      fetchCurrentUser()
+        .unwrap()
+        .then(resp => {
+          dispatch(setUser(resp));
+        })
+        .catch(err => {
+          dispatch(resetToken());
+          dispatch(resetUser());
+        });
     }
-  }, [fetchCurrentUser, token]);
+  }, [dispatch, fetchCurrentUser, token]);
 
   return (
     !isLoadingAuthUser && (

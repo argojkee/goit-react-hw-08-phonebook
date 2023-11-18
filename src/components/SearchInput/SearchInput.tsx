@@ -14,7 +14,9 @@ const SearchInput = () => {
       <div className="input-container">
         <AiOutlineSearch className="search-icon" size={16} />
         <input
-          onChange={({ target: { value } }) =>
+          onChange={({
+            target: { value },
+          }: React.ChangeEvent<HTMLInputElement>) =>
             dispatch(changeFilterValue(value))
           }
           value={filter}

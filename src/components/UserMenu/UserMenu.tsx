@@ -10,16 +10,16 @@ import { useAppDispatch } from "../../redux/hooks";
 
 const UserMenu = () => {
   const userEmail = useAppSelector(getUserEmail);
-  const [logOut, { isLoading: isPending }] = useLogOutMutation();
+  const [logOut, { isLoading: isPending, isError }] = useLogOutMutation();
   const dispatch = useAppDispatch();
 
   const onLogOutClick = async () => {
-    const result = await logOut();
+    await logOut();
 
     dispatch(resetToken());
     dispatch(resetUser());
 
-    if (!result.error) {
+    if (!isError) {
       toastSuccess("Log out successful. Come back sooner");
     }
   };

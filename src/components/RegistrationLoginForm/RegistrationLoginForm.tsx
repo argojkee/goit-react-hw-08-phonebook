@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { PiSpinnerGap } from "react-icons/pi";
 import { MdAppRegistration } from "react-icons/md";
 import { BiLogIn } from "react-icons/bi";
-import { RegistrationLoginFormStyle } from "./RegistrationLoginFormStyle";
+import { RegistrationLoginFormStyle } from "./RegistrationLoginFormStyle.styled";
 import { useRegisterMutation, useLogInMutation } from "redux/baseApi";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
 import { setToken, setUser } from "../../redux/auth/authSlice";
@@ -50,8 +50,6 @@ const RegistrationLoginForm = () => {
         logIn({ password, email })
           .unwrap()
           .then(resp => {
-            console.log(resp);
-
             dispatch(setToken(resp.token));
             dispatch(setUser(resp.user));
           });

@@ -1,7 +1,7 @@
 import { useAppSelector } from "redux/hooks";
 import { getUserName, getToken } from "redux/auth/authSelectors";
 import Container from "components/Container/Container";
-import { HomePageStyle } from "./pageStyles/HomePageStyle";
+import { HomePageStyle } from "./pageStyles/HomePageStyle.styled";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {

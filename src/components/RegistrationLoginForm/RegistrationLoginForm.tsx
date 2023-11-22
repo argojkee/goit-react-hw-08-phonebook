@@ -59,13 +59,11 @@ const RegistrationLoginForm = () => {
 
   const isLoginPage = location.pathname === "/login";
 
-  const handleSubmit = ({ name, email, password }, { resetForm }) => {
+  const handleSubmit = ({ name, email, password }) => {
     if (isLoginPage) {
       logIn({ password, email })
         .unwrap()
         .then(resp => {
-          console.log(isLoginError);
-
           dispatch(
             setUser({
               user: resp.user,

@@ -52,7 +52,7 @@ const AddContactForm = () => {
       toastError("Sorry, you already have this contact in your book");
       return;
     }
-    addContact({ name: addingName, number: "" })
+    addContact({ name: addingName, number: addingNumber })
       .unwrap()
       .then(resp => {
         toastSuccess("Contact has been added to your book");

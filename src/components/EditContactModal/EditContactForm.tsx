@@ -1,6 +1,4 @@
 import { useCustomContext } from "context/userEditContext";
-import { useState } from "react";
-
 import { EditContactFormStyle } from "./EditContactFormStyle.styled";
 import { FiEdit2 } from "react-icons/fi";
 import { PiSpinner } from "react-icons/pi";
@@ -43,10 +41,7 @@ const EditContactForm = () => {
   //   }
   // };
 
-  const handleSubmit = async (
-    { name: editName, number: editNumber },
-    { resetForm }
-  ) => {
+  const handleSubmit = async ({ name: editName, number: editNumber }) => {
     if (!editName && !editNumber) {
       toastError("Please, enter name or number");
       return;
@@ -64,19 +59,26 @@ const EditContactForm = () => {
     const sendingName = editName ? editName : name;
     const sendingNumber = editNumber ? editNumber : number;
 
-    await editContact({ id, name: sendingName, number: sendingNumber });
-    if (isError) {
-      toastError(
-        "Oops... Something went wrong =(. Please, reload page and try again"
-      );
+    editContact({ id, name: sendingName, number: sendingNumber })
+      .then(resp => {
+        toastSuccess("Successful!!! Your contact has been edited");
+        setToggleShowModal(false);
+      })
+      .catch(err => {
+        toastError(
+          "Oops... Something went wrong =(. Please, reload page and try again"
+        );
+      });
+    // if (isError) {
+    //   toastError(
+    //     "Oops... Something went wrong =(. Please, reload page and try again"
+    //   );
 
-      return;
-    } else {
-      toastSuccess("Successful!!! Your contact has been edited");
-      setToggleShowModal(false);
-    }
-
-    resetForm();
+    //   return;
+    // } else {
+    //   toastSuccess("Successful!!! Your contact has been edited");
+    //   setToggleShowModal(false);
+    // }
   };
 
   return (

@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
+import { Form } from "formik";
 
-const AddContactFormStyle = styled.form`
+const AddContactFormStyle = styled(Form)`
   max-width: 600px;
   text-align: center;
   border: 1px solid black;
@@ -9,7 +10,7 @@ const AddContactFormStyle = styled.form`
   min-height: 200px;
   padding-top: 20px;
   padding-bottom: 20px;
-  row-gap: 40px;
+  row-gap: 30px;
   display: flex;
   flex-direction: column;
 

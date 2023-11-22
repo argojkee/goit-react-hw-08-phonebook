@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const EditModalStyled = styled.div`
   position: fixed;
@@ -12,7 +12,7 @@ const EditModalStyled = styled.div`
 
   .modal {
     position: relative;
-    height: 400px;
+    height: 500px;
     width: 80%;
     max-height: 95%;
     position: absolute;

@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { Form } from "formik";
 
-export const EditContactFormStyle = styled.form`
+export const EditContactFormStyle = styled(Form)`
   width: 80%;
   background-color: rgba(244, 164, 96, 0.3);
   margin-left: auto;
@@ -18,18 +19,6 @@ export const EditContactFormStyle = styled.form`
     margin-right: auto;
     position: relative;
     display: inline-block;
-  }
-
-  .notify {
-    color: blue;
-  }
-  .invalid {
-    color: red;
-  }
-
-  .invalid,
-  .notify {
-    margin-top: -20px;
   }
 
   label {

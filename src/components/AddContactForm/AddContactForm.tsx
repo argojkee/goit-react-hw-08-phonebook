@@ -52,18 +52,28 @@ const AddContactForm = () => {
       toastError("Sorry, you already have this contact in your book");
       return;
     }
-    addContact({ name: addingName, number: addingNumber });
+    addContact({ name: addingName, number: "" })
+      .unwrap()
+      .then(resp => {
+        toastSuccess("Contact has been added to your book");
+        resetForm();
+      })
+      .catch(err => {
+        toastError(
+          "Oops... Something went wrong =(. Please, reload page and try again"
+        );
+      });
     // console.log(isError);
 
-    if (isError) {
-      toastError(
-        "Oops... Something went wrong =(. Please, reload page and try again"
-      );
-      return;
-    } else {
-      toastSuccess("Contact has been added to your book");
-      resetForm();
-    }
+    // if (isError) {
+    //   toastError(
+    //     "Oops... Something went wrong =(. Please, reload page and try again"
+    //   );
+    //   return;
+    // } else {
+    //   toastSuccess("Contact has been added to your book");
+    //   resetForm();
+    // }
   };
 
   return (

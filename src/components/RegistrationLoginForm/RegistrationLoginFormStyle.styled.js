@@ -1,9 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { Form } from "formik";
 
-export const RegistrationLoginFormStyle = styled.form`
+export const RegistrationLoginFormStyle = styled(Form)`
   border: 1px solid black;
   border-radius: 20px;
-  max-height: 300px;
+  max-height: 500px;
   min-height: 200px;
   padding-top: 40px;
   padding-bottom: 20px;

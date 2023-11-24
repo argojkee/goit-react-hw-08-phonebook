@@ -1,42 +1,22 @@
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { BiLogIn } from "react-icons/bi";
 import { MdAppRegistration } from "react-icons/md";
 
+import { NavLink } from "react-router-dom";
+
 const AuthLinksList = () => {
-  const { pathname } = useLocation();
-  const [currentPage, setCurrentPage] = useState<string>("");
-
-  useEffect(() => {
-    if (pathname === "/register") {
-      setCurrentPage("register");
-    } else if (pathname === "/login") {
-      setCurrentPage("login");
-    } else {
-      setCurrentPage("");
-    }
-  }, [pathname]);
-
   return (
     <ul className="auth-list">
       <li>
-        <Link
-          to="/register"
-          className={`auth-link ${currentPage === "register" && "active"}`}
-        >
+        <NavLink to="/register" className="auth-link">
           <MdAppRegistration size={24} />
           Registration
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link
-          to="/login"
-          className={`auth-link ${currentPage === "login" && "active"}`}
-        >
+        <NavLink to="/login" className="auth-link">
           <BiLogIn size={24} />
           Login
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );

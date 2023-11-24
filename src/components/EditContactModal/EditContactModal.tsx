@@ -5,7 +5,9 @@ import EditContactForm from "./EditContactForm";
 import { useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-const modalRoot = document.getElementById("contact-edit-modal-root");
+const modalRoot = document.getElementById(
+  "contact-edit-modal-root"
+) as HTMLDivElement;
 
 const EditContactModal = () => {
   const { name, number, isShowModal, setIsShowModal } = useCustomContext();

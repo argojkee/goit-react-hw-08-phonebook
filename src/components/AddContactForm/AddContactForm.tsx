@@ -32,18 +32,9 @@ const schema = yup.object().shape({
 });
 
 const AddContactForm = () => {
-  const { data: contacts, isError: errorFetch } = useFetchContactsQuery();
+  const { data: contacts } = useFetchContactsQuery();
 
-  const [addContact, { isLoading: isAdding, isError: errorAdd, error }] =
-    useAddContactMutation();
-
-  // const handlerChangeInput = () => {
-  // if (target.name === "name") {
-  //   setName(target.value);
-  // } else {
-  //   setNumber(target.value);
-  // }
-  // };
+  const [addContact, result] = useAddContactMutation();
 
   const handlerSubmitForm = async (
     { name: addingName, number: addingNumber },
@@ -65,21 +56,15 @@ const AddContactForm = () => {
         resetForm();
       })
       .catch(err => {
+        console.log(err);
         toastError(
           "Oops... Something went wrong =(. Please, reload page and try again"
         );
       });
 
-    // await addContact({ name: addingName, number: addingNumber });
+    // *
 
-    //*
-    // console.log(errorAdd);
-    // await addContact({ name: "", number: "" }).unwrap();
-    // console.log(errorAdd);
-
-    //*
-    // console.log(isError);
-    // if (isError) {
+    // if (errorAdd) {
     //   toastError(
     //     "Oops... Something went wrong =(. Please, reload page and try again"
     //   );
@@ -130,11 +115,11 @@ const AddContactForm = () => {
         </div>
 
         <button type="submit">
-          {isAdding ? (
+          {/* {isAdding ? (
             <PiSpinnerGap className="spinner" size={16} />
           ) : (
             <GrAdd size={16} />
-          )}
+          )} */}
           Add contact
         </button>
         <ErrorMessage

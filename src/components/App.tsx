@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import Layout from "./Layout/Layout";
 import { useAppSelector } from "../redux/hooks";
@@ -53,6 +53,7 @@ export const App = () => {
           />
           <Route path="login" element={<PublicRoute component={LoginPage} />} />
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     )
   );

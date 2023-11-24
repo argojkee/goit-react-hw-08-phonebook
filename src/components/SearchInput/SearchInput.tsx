@@ -8,19 +8,18 @@ const SearchInput = () => {
   const dispatch = useAppDispatch();
   const filter = useAppSelector(getFilter);
 
+  const handleChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeFilterValue(value));
+  };
+
   return (
     <SearchInputStyle>
       <h3>Search contact by name or number</h3>
       <div className="input-container">
         <AiOutlineSearch className="search-icon" size={16} />
-        <input
-          onChange={({
-            target: { value },
-          }: React.ChangeEvent<HTMLInputElement>) =>
-            dispatch(changeFilterValue(value))
-          }
-          value={filter}
-        />
+        <input value={filter} onChange={handleChange} />
       </div>
     </SearchInputStyle>
   );

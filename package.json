@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://argojkee.github.io/goit-react-hw-08-phonebook/",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
+    "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.0",
     "formik": "^2.4.5",
     "react": "^18.1.0",
@@ -49,6 +49,7 @@
     "@types/node": "^20.9.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
+    "@types/react-paginate": "^7.1.4",
     "@types/react-toastify": "^4.1.0",
     "typescript": "^4.9.5"
   }

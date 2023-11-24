@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
+import { Contact } from "types";
 
 interface UserEditContextProps {
   name: string;

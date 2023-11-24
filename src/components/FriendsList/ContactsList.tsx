@@ -11,12 +11,13 @@ import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
 import { useFetchContactsQuery } from "../../redux/baseApi";
+import { Contact } from "types";
 
 const ContactList = () => {
   const filter = useAppSelector(getFilter);
   const context = useCustomContext();
-  const [filteredContacts, setFilteredContacts] = useState([]);
-  const [currentItems, setCurrentItems] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [currentItems, setCurrentItems] = useState<Contact[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
@@ -45,8 +46,11 @@ const ContactList = () => {
   }, [contacts, filter]);
 
   useEffect(() => {
-    const paginationList = document.querySelector(".pagination-list");
-    const firstPage = paginationList?.firstElementChild.nextSibling;
+    const paginationList = document.querySelector(
+      ".pagination-list"
+    ) as HTMLElement;
+    const firstPage = paginationList?.firstElementChild
+      .nextSibling as HTMLElement;
     const endOffset = itemOffset + itemsPerPage;
 
     if (endOffset === itemsPerPage) {
@@ -69,9 +73,8 @@ const ContactList = () => {
     }
   }, [itemOffset, itemsPerPage, filteredContacts]);
 
-  const handlePageClick = event => {
-    const newOffset =
-      (event.selected * itemsPerPage) % filteredContacts?.length;
+  const handlePageClick = ({ selected }: { selected: number }): void => {
+    const newOffset = (selected * itemsPerPage) % filteredContacts?.length;
 
     setItemOffset(newOffset);
   };

@@ -26,6 +26,11 @@ const initialRegisterValues: IInitialRegisterValues = {
   password: "",
 };
 
+const initialLoginValues: IInitialLoginValues = {
+  email: "",
+  password: "",
+};
+
 const schemaRegister = yup.object().shape({
   name: yup
     .string()
@@ -40,11 +45,6 @@ const schemaRegister = yup.object().shape({
     .max(16, "Password must be 16 symbols maximum")
     .required("Field password is required"),
 });
-
-const initialLoginValues: IInitialLoginValues = {
-  email: "",
-  password: "",
-};
 
 const schemaLogin = yup.object().shape({
   email: yup.string().email().required("Field email is required"),
@@ -127,26 +127,12 @@ const RegistrationLoginForm = () => {
         <RegistrationLoginFormStyle autoComplete="off">
           {!isLoginPage && (
             <div className="label-container">
-              <Field
-                placeholder="Name"
-                id="name"
-                type="text"
-                name="name"
-                // onChange={handleChange}
-                // value={name}
-              />
+              <Field placeholder="Name" id="name" type="text" name="name" />
               <label htmlFor="name">Name</label>
             </div>
           )}
           <div className="label-container">
-            <Field
-              placeholder="Email"
-              id="email"
-              type="email"
-              name="email"
-              // onChange={handleChange}
-              // value={email}
-            />
+            <Field placeholder="Email" id="email" type="email" />
             <label htmlFor="email">Email</label>
           </div>
           <div className="label-container">
@@ -155,19 +141,10 @@ const RegistrationLoginForm = () => {
               id="password"
               type="password"
               name="password"
-              // onChange={handleChange}
-              // value={password}
             />
             <label htmlFor="password">Password</label>
           </div>
-          <button
-            // disabled={
-            //   isLoginPage
-            //     ? !(!!email && password.length >= 7)
-            //     : !(!!name && !!email && password.length >= 7)
-            // }
-            type="submit"
-          >
+          <button type="submit">
             {isRegisterLoading || isLoginLoading ? (
               <PiSpinnerGap className="spinner" size={16} />
             ) : isLoginPage ? (

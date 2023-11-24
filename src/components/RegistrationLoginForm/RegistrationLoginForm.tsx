@@ -11,7 +11,16 @@ import * as yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
 
-const initialRegisterValues = {
+interface IInitialLoginValues {
+  email: string;
+  password: string;
+}
+
+interface IInitialRegisterValues extends IInitialLoginValues {
+  name: string;
+}
+
+const initialRegisterValues: IInitialRegisterValues = {
   name: "",
   email: "",
   password: "",
@@ -32,7 +41,7 @@ const schemaRegister = yup.object().shape({
     .required("Field password is required"),
 });
 
-const initialLoginValues = {
+const initialLoginValues: IInitialLoginValues = {
   email: "",
   password: "",
 };

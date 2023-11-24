@@ -3,14 +3,13 @@ import { FiEdit2 } from "react-icons/fi";
 import { Contact } from "types";
 
 const EditContactButton = ({ id, name, number }: Contact) => {
-  const { setId, isShowModal, setToggleShowModal, setName, setNumber } =
-    useCustomContext();
+  const { setId, setIsShowModal, setName, setNumber } = useCustomContext();
 
   const handleEditContact = () => {
     setId(id);
     setName(name);
     setNumber(number);
-    setToggleShowModal(!isShowModal);
+    setIsShowModal(true);
   };
 
   return (

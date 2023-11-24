@@ -8,14 +8,14 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 const modalRoot = document.getElementById("contact-edit-modal-root");
 
 const EditContactModal = () => {
-  const { name, number, isShowModal, setToggleShowModal } = useCustomContext();
+  const { name, number, isShowModal, setIsShowModal } = useCustomContext();
 
   useEffect(() => {
     function onEsc(e: KeyboardEvent) {
       if (e.code !== "Escape") {
         return;
       }
-      setToggleShowModal(!isShowModal);
+      setIsShowModal(false);
     }
     document.body.style.overflow = "hidden";
     const paddingOffSet = window.innerWidth - document.body.offsetWidth + "px";
@@ -28,13 +28,13 @@ const EditContactModal = () => {
       document.body.style.overflow = "auto";
       document.body.style.paddingRight = "0px";
     };
-  }, [isShowModal, setToggleShowModal]);
+  }, [isShowModal, setIsShowModal]);
 
   const onBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) {
       return;
     }
-    setToggleShowModal(!isShowModal);
+    setIsShowModal(false);
   };
 
   return createPortal(
@@ -43,7 +43,7 @@ const EditContactModal = () => {
         <button
           type="button"
           className="close-btn"
-          onClick={() => setToggleShowModal(!isShowModal)}
+          onClick={() => setIsShowModal(false)}
         >
           <AiOutlineCloseCircle size={24} />
         </button>

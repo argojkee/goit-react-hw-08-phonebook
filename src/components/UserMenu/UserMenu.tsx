@@ -2,7 +2,7 @@ import { getUserEmail } from "redux/auth/authSelectors";
 import { useAppSelector } from "../../redux/hooks";
 import { PiSpinnerGap } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
-import { UserMenuStyle } from "./UserMenuStyle";
+import { UserMenuStyle } from "./UserMenuStyle.styled";
 import { useLogOutMutation } from "redux/baseApi";
 import { toastSuccess } from "toastNotification/toastNotification";
 import { resetUser } from "../../redux/auth/authSlice";

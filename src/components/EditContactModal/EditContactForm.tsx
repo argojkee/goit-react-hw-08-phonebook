@@ -8,7 +8,13 @@ import { Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
 
-const initialValues = {
+
+type InitialValuesType = {
+  name: string;
+  number: string;
+};
+
+const initialValues: InitialValuesType = {
   name: "",
   number: "",
 };
@@ -26,7 +32,7 @@ const schema = yup.object().shape({
 });
 
 const EditContactForm = () => {
-  const { name, number, id, setToggleShowModal } = useCustomContext();
+  const { name, number, id, setIsShowModal } = useCustomContext();
 
   const { data: contacts } = useFetchContactsQuery();
 
@@ -56,13 +62,13 @@ const EditContactForm = () => {
       return;
     }
 
-    const sendingName = editName ? editName : name;
-    const sendingNumber = editNumber ? editNumber : number;
+    const sendingName: string = editName ? editName : name;
+    const sendingNumber: string = editNumber ? editNumber : number;
 
     editContact({ id, name: sendingName, number: sendingNumber })
       .then(resp => {
         toastSuccess("Successful!!! Your contact has been edited");
-        setToggleShowModal(false);
+        setIsShowModal(false);
       })
       .catch(err => {
         toastError(
@@ -77,7 +83,7 @@ const EditContactForm = () => {
     //   return;
     // } else {
     //   toastSuccess("Successful!!! Your contact has been edited");
-    //   setToggleShowModal(false);
+    //   setIsShowModal(false);
     // }
   };
 

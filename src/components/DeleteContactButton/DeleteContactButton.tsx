@@ -44,5 +44,3 @@ const DeleteContactButton = ({ userId }: Props) => {
 };
 
 export default DeleteContactButton;
-
-

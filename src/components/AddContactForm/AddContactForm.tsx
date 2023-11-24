@@ -7,7 +7,12 @@ import * as yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
 
-const initialValues = {
+type InitialValuesType = {
+  name: string;
+  number: string;
+};
+
+const initialValues: InitialValuesType = {
   name: "",
   number: "",
 };
@@ -27,9 +32,9 @@ const schema = yup.object().shape({
 });
 
 const AddContactForm = () => {
-  const { data: contacts } = useFetchContactsQuery();
+  const { data: contacts, isError: errorFetch } = useFetchContactsQuery();
 
-  const [addContact, { isLoading: isAdding, isError }] =
+  const [addContact, { isLoading: isAdding, isError: errorAdd, error }] =
     useAddContactMutation();
 
   // const handlerChangeInput = () => {
@@ -52,6 +57,7 @@ const AddContactForm = () => {
       toastError("Sorry, you already have this contact in your book");
       return;
     }
+
     addContact({ name: addingName, number: addingNumber })
       .unwrap()
       .then(resp => {
@@ -63,8 +69,16 @@ const AddContactForm = () => {
           "Oops... Something went wrong =(. Please, reload page and try again"
         );
       });
-    // console.log(isError);
 
+    // await addContact({ name: addingName, number: addingNumber });
+
+    //*
+    // console.log(errorAdd);
+    // await addContact({ name: "", number: "" }).unwrap();
+    // console.log(errorAdd);
+
+    //*
+    // console.log(isError);
     // if (isError) {
     //   toastError(
     //     "Oops... Something went wrong =(. Please, reload page and try again"

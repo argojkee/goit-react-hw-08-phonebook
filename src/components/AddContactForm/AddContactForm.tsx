@@ -34,7 +34,8 @@ const schema = yup.object().shape({
 const AddContactForm = () => {
   const { data: contacts } = useFetchContactsQuery();
 
-  const [addContact, result] = useAddContactMutation();
+  const [addContact, { isLoading: isAdding, isError }] =
+    useAddContactMutation();
 
   const handlerSubmitForm = async (
     { name: addingName, number: addingNumber },
@@ -64,7 +65,8 @@ const AddContactForm = () => {
 
     // *
 
-    // if (errorAdd) {
+    // await addContact({ name: addingName, number: addingNumber });
+    // if (isError) {
     //   toastError(
     //     "Oops... Something went wrong =(. Please, reload page and try again"
     //   );
@@ -89,8 +91,6 @@ const AddContactForm = () => {
           <Field
             id="add-name"
             placeholder="Name"
-            // value={name}
-            // onChange={handlerChangeInput}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -103,8 +103,6 @@ const AddContactForm = () => {
           <Field
             id="add-number"
             placeholder="Number"
-            // value={number}
-            // onChange={handlerChangeInput}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
@@ -115,11 +113,11 @@ const AddContactForm = () => {
         </div>
 
         <button type="submit">
-          {/* {isAdding ? (
+          {isAdding ? (
             <PiSpinnerGap className="spinner" size={16} />
           ) : (
             <GrAdd size={16} />
-          )} */}
+          )}
           Add contact
         </button>
         <ErrorMessage

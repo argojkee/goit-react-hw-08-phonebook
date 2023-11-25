@@ -39,13 +39,7 @@ const EditContactForm = () => {
   const [editContact, { isLoading: editing, isError }] =
     useEditContactMutation();
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.name === "name") {
-  //     setEditName(e.target.value);
-  //   } else {
-  //     setEditNumber(e.target.value);
-  //   }
-  // };
+
 
   const handleSubmit = async ({ name: editName, number: editNumber }) => {
     if (!editName && !editNumber) {
@@ -75,6 +69,8 @@ const EditContactForm = () => {
           "Oops... Something went wrong =(. Please, reload page and try again"
         );
       });
+    
+    // await editContact({ id, name: sendingName, number: sendingNumber });
     // if (isError) {
     //   toastError(
     //     "Oops... Something went wrong =(. Please, reload page and try again"

@@ -68,7 +68,7 @@ const RegistrationLoginForm = () => {
 
   const isLoginPage = location.pathname === "/login";
 
-  const handleSubmit = ({ name, email, password }) => {
+  const handleSubmit = async ({ name, email, password }) => {
     if (isLoginPage) {
       logIn({ password, email })
         .unwrap()
@@ -86,6 +86,13 @@ const RegistrationLoginForm = () => {
             "Not valid email or password. Please, try again or register new account"
           );
         });
+
+      // await logIn({ password, email });
+      // if (isLoginError) {
+      //   toastError("Something went wrong. Please try again or log in");
+      // } else {
+      //   toastSuccess("Log in" successful. Welcome to phone book");
+      // }
     } else {
       registration({ name, email, password })
         .unwrap()
@@ -101,6 +108,8 @@ const RegistrationLoginForm = () => {
         .catch(err => {
           toastError("Something went wrong. Please, try again");
         });
+
+      // await registration({ name, email, password });
       // if (isRegisterError) {
       //   toastError("Something went wrong. Please try again or log in");
       // } else {

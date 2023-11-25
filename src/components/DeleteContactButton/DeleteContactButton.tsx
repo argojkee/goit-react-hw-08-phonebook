@@ -15,17 +15,27 @@ const DeleteContactButton = ({ userId }: Props) => {
 
   const handleDelete = async () => {
     setIsCurrentButton(true);
-    await deleteContact(userId);
 
-    if (isError) {
-      toastError(
-        "Oops... Something went wrong =(. Please, reload page and try again"
-      );
-    } else {
-      toastSuccess("Contacts has been deleted from your book");
-    }
+    deleteContact(userId)
+      .unwrap()
+      .then(resp => toastSuccess("Contacts has been deleted from your book"))
+      .catch(err =>
+        toastError(
+          "Oops... Something went wrong =(. Please, reload page and try again"
+        )
+      )
+      .finally(() => setIsCurrentButton(false));
 
-    setIsCurrentButton(false);
+    // await deleteContact(userId);
+    // if (isError) {
+    //   toastError(
+    //     "Oops... Something went wrong =(. Please, reload page and try again"
+    //   );
+    // } else {
+    //   toastSuccess("Contacts has been deleted from your book");
+    // }
+
+    // setIsCurrentButton(false);
   };
 
   return (

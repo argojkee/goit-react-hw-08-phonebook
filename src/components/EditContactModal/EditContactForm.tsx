@@ -1,4 +1,3 @@
-import { useCustomContext } from "context/userEditContext";
 import { EditContactFormStyle } from "./EditContactFormStyle.styled";
 import { FiEdit2 } from "react-icons/fi";
 import { PiSpinner } from "react-icons/pi";
@@ -7,7 +6,11 @@ import { toastSuccess, toastError } from "toastNotification/toastNotification";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
-
+import {
+  useCustomDispatchContext,
+  useCustomStateContext,
+} from "context/userContext";
+import { toggleModal } from "context/userContext";
 
 type InitialValuesType = {
   name: string;
@@ -32,20 +35,13 @@ const schema = yup.object().shape({
 });
 
 const EditContactForm = () => {
-  const { name, number, id, setIsShowModal } = useCustomContext();
+  const { state } = useCustomStateContext();
+  const { dispatch } = useCustomDispatchContext();
 
   const { data: contacts } = useFetchContactsQuery();
 
   const [editContact, { isLoading: editing, isError }] =
     useEditContactMutation();
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.name === "name") {
-  //     setEditName(e.target.value);
-  //   } else {
-  //     setEditNumber(e.target.value);
-  //   }
-  // };
 
   const handleSubmit = async ({ name: editName, number: editNumber }) => {
     if (!editName && !editNumber) {
@@ -62,13 +58,14 @@ const EditContactForm = () => {
       return;
     }
 
-    const sendingName: string = editName ? editName : name;
-    const sendingNumber: string = editNumber ? editNumber : number;
+    const sendingName: string = editName ? editName : state.user.name;
+    const sendingNumber: string = editNumber ? editNumber : state.user.number;
 
-    editContact({ id, name: sendingName, number: sendingNumber })
+    editContact({ id: state.user.id, name: sendingName, number: sendingNumber })
       .then(resp => {
         toastSuccess("Successful!!! Your contact has been edited");
-        setIsShowModal(false);
+        // setIsShowModal(false);
+        dispatch(toggleModal(false));
       })
       .catch(err => {
         toastError(

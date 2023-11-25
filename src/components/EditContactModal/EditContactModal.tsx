@@ -1,23 +1,29 @@
 import { createPortal } from "react-dom";
-import { useCustomContext } from "context/userEditContext";
 import EditModalStyled from "./EditContactModal.styled";
 import EditContactForm from "./EditContactForm";
 import { useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import {
+  useCustomDispatchContext,
+  useCustomStateContext,
+} from "context/userContext";
+import { toggleModal } from "context/userContext";
 
 const modalRoot = document.getElementById(
   "contact-edit-modal-root"
 ) as HTMLDivElement;
 
 const EditContactModal = () => {
-  const { name, number, isShowModal, setIsShowModal } = useCustomContext();
+  const { state } = useCustomStateContext();
+  const { dispatch } = useCustomDispatchContext();
 
   useEffect(() => {
     function onEsc(e: KeyboardEvent) {
       if (e.code !== "Escape") {
         return;
       }
-      setIsShowModal(false);
+      dispatch(toggleModal(true));
+      // setIsShowModal(false);
     }
     document.body.style.overflow = "hidden";
     const paddingOffSet = window.innerWidth - document.body.offsetWidth + "px";
@@ -30,13 +36,13 @@ const EditContactModal = () => {
       document.body.style.overflow = "auto";
       document.body.style.paddingRight = "0px";
     };
-  }, [isShowModal, setIsShowModal]);
+  }, [dispatch]);
 
   const onBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) {
       return;
     }
-    setIsShowModal(false);
+    dispatch(toggleModal(false));
   };
 
   return createPortal(
@@ -45,7 +51,7 @@ const EditContactModal = () => {
         <button
           type="button"
           className="close-btn"
-          onClick={() => setIsShowModal(false)}
+          onClick={() => dispatch(toggleModal(false))}
         >
           <AiOutlineCloseCircle size={24} />
         </button>
@@ -55,13 +61,14 @@ const EditContactModal = () => {
         <ul className="user-info-container">
           <li>
             <p className="user-info-item">
-              Current name: <span className="user-info-current">{name}</span>
+              Current name:{" "}
+              <span className="user-info-current">{state.user.name}</span>
             </p>
           </li>
           <li>
             <p className="user-info-item">
               Current number:{" "}
-              <span className="user-info-current">{number}</span>
+              <span className="user-info-current">{state.user.number}</span>
             </p>
           </li>
         </ul>

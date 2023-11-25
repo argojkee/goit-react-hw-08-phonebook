@@ -4,7 +4,6 @@ import ContactsListStyled from "./ContactsListStyle.styled";
 import { getFilter } from "redux/contacts/filterSlice";
 import { useEffect } from "react";
 import EditContactModal from "components/EditContactModal/EditContactModal";
-import { useCustomContext } from "context/userEditContext";
 import MainSpinner from "./MainSpinner";
 import { ContactsContainerStyle } from "./ContactsContainer.styled";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
@@ -12,10 +11,10 @@ import ReactPaginate from "react-paginate";
 import { useState } from "react";
 import { useFetchContactsQuery } from "../../redux/baseApi";
 import { Contact } from "types";
+import { useCustomStateContext } from "context/userContext";
 
 const ContactList = () => {
   const filter = useAppSelector(getFilter);
-  const context = useCustomContext();
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [currentItems, setCurrentItems] = useState<Contact[]>([]);
   const [pageCount, setPageCount] = useState(0);
@@ -26,6 +25,7 @@ const ContactList = () => {
     isLoading: loading,
     isError: error,
   } = useFetchContactsQuery();
+  const { state } = useCustomStateContext();
 
   useEffect(() => {
     setFilteredContacts(
@@ -122,7 +122,7 @@ const ContactList = () => {
     return (
       <ContactsContainerStyle>
         <ContactsListStyled>
-          {context.isShowModal && <EditContactModal />}
+          {state.isShowModal && <EditContactModal />}
           {currentItems?.map(contact => (
             <ContactItem
               name={contact.name}

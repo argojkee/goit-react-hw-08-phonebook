@@ -1,15 +1,18 @@
-import { useCustomContext } from "context/userEditContext";
+import {
+  useCustomDispatchContext,
+  useCustomStateContext,
+} from "context/userContext";
 import { FiEdit2 } from "react-icons/fi";
 import { Contact } from "types";
+import { updateUser } from "context/userContext";
+import { toggleModal } from "context/userContext";
 
 const EditContactButton = ({ id, name, number }: Contact) => {
-  const { setId, setIsShowModal, setName, setNumber } = useCustomContext();
+  const { dispatch } = useCustomDispatchContext();
 
   const handleEditContact = () => {
-    setId(id);
-    setName(name);
-    setNumber(number);
-    setIsShowModal(true);
+    dispatch(updateUser({ id, name, number }));
+    dispatch(toggleModal(true));
   };
 
   return (

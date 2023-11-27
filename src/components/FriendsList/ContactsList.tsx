@@ -2,14 +2,13 @@ import ContactItem from "./ContactItem";
 import { useAppSelector } from "../../redux/hooks";
 import ContactsListStyled from "./ContactsListStyle.styled";
 import { getFilter } from "redux/contacts/filterSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import EditContactModal from "components/EditContactModal/EditContactModal";
 import { useCustomContext } from "context/userEditContext";
 import MainSpinner from "./MainSpinner";
 import { ContactsContainerStyle } from "./ContactsContainer.styled";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import ReactPaginate from "react-paginate";
-import { useState } from "react";
 import { useFetchContactsQuery } from "../../redux/baseApi";
 import { Contact } from "types";
 

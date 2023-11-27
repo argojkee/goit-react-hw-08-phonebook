@@ -1,5 +1,6 @@
 import { ToastPosition, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { throttle } from "lodash";
 
 type ToastOptionsTypes = {
   position: ToastPosition;
@@ -11,8 +12,14 @@ const toastOptions: ToastOptionsTypes = {
   autoClose: 3000,
 };
 
-export const toastSuccess = (message: string) =>
+const toastSuccessWithoutThrottle = (message: string) =>
   toast.success(message, toastOptions);
 
-export const toastError = (message: string) =>
+const toastErrorWithoutThrottle = (message: string) =>
   toast.error(message, toastOptions);
+export const toastSuccess = throttle(toastSuccessWithoutThrottle, 500, {
+  trailing: false,
+});
+export const toastError = throttle(toastErrorWithoutThrottle, 500, {
+  trailing: false,
+});

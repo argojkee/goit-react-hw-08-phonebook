@@ -7,7 +7,7 @@ import { toastSuccess, toastError } from "toastNotification/toastNotification";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
-
+import { useState, useEffect } from "react";
 
 type InitialValuesType = {
   name: string;
@@ -33,13 +33,10 @@ const schema = yup.object().shape({
 
 const EditContactForm = () => {
   const { name, number, id, setIsShowModal } = useCustomContext();
-
   const { data: contacts } = useFetchContactsQuery();
-
   const [editContact, { isLoading: editing, isError }] =
     useEditContactMutation();
-
-
+  const [editCounter, setEditCounter] = useState(0);
 
   const handleSubmit = async ({ name: editName, number: editNumber }) => {
     if (!editName && !editNumber) {
@@ -59,17 +56,22 @@ const EditContactForm = () => {
     const sendingName: string = editName ? editName : name;
     const sendingNumber: string = editNumber ? editNumber : number;
 
-    editContact({ id, name: sendingName, number: sendingNumber })
-      .then(resp => {
-        toastSuccess("Successful!!! Your contact has been edited");
-        setIsShowModal(false);
-      })
-      .catch(err => {
-        toastError(
-          "Oops... Something went wrong =(. Please, reload page and try again"
-        );
-      });
-    
+    await editContact({
+      id,
+      name: sendingName,
+      number: sendingNumber,
+    });
+    setEditCounter(1);
+    // .then(resp => {
+    //   toastSuccess("Successful!!! Your contact has been edited");
+    //   setIsShowModal(false);
+    // })
+    // .catch(err => {
+    //   toastError(
+    //     "Oops... Something went wrong =(. Please, reload page and try again"
+    //   );
+    // });
+
     // await editContact({ id, name: sendingName, number: sendingNumber });
     // if (isError) {
     //   toastError(
@@ -82,7 +84,20 @@ const EditContactForm = () => {
     //   setIsShowModal(false);
     // }
   };
+  useEffect(() => {
+    if (!editCounter || editing) return;
 
+    if (isError) {
+      toastError(
+        "Oops... Something went wrong =(. Please, reload page and try again"
+      );
+
+      return;
+    } else {
+      toastSuccess("Successful!!! Your contact has been edited");
+      setIsShowModal(false);
+    }
+  }, [editCounter, editing, isError, setIsShowModal]);
   return (
     <Formik
       initialValues={initialValues}

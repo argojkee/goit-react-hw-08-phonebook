@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { baseApi } from "redux/baseApi";
-import { ExndpointType } from "../baseApi";
+import { EndpointType } from "../baseApi";
 
 type State = {
   user: {
@@ -20,21 +20,21 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addMatcher(
-      (baseApi.endpoints as ExndpointType).logIn.matchFulfilled,
+      (baseApi.endpoints as EndpointType).logIn.matchFulfilled,
       (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
       }
     );
     builder.addMatcher(
-      (baseApi.endpoints as ExndpointType).register.matchFulfilled,
+      (baseApi.endpoints as EndpointType).register.matchFulfilled,
       (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
       }
     );
     builder.addMatcher(
-      (baseApi.endpoints as ExndpointType).logOut.matchFulfilled,
+      (baseApi.endpoints as EndpointType).logOut.matchFulfilled,
       state => {
         state.user = { name: null, email: null };
         state.token = null;
@@ -42,7 +42,7 @@ const authSlice = createSlice({
     );
 
     builder.addMatcher(
-      (baseApi.endpoints as ExndpointType).fetchCurrentUser.matchFulfilled,
+      (baseApi.endpoints as EndpointType).fetchCurrentUser.matchFulfilled,
       (state, action) => {
         console.log(action);
         state.user = action.payload;
@@ -50,7 +50,7 @@ const authSlice = createSlice({
     );
 
     builder.addMatcher(
-      (baseApi.endpoints as ExndpointType).fetchCurrentUser.matchRejected,
+      (baseApi.endpoints as EndpointType).fetchCurrentUser.matchRejected,
       state => {
         state.token = null;
       }

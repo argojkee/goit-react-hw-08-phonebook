@@ -125,4 +125,4 @@ export const {
   useEditContactMutation,
 } = contactsApi;
 
-export type ExndpointType = typeof authApi.endpoints;
+export type EndpointType = typeof authApi.endpoints;

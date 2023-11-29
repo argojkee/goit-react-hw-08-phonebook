@@ -34,8 +34,7 @@ const schema = yup.object().shape({
 const AddContactForm = () => {
   const { data: contacts } = useFetchContactsQuery();
 
-  const [addContact, { isLoading: isAdding, isError }] =
-    useAddContactMutation();
+  const [addContact, { isLoading: isAdding }] = useAddContactMutation();
 
   const handlerSubmitForm = async (
     { name: addingName, number: addingNumber },
@@ -50,31 +49,17 @@ const AddContactForm = () => {
       return;
     }
 
-    addContact({ name: addingName, number: addingNumber })
-      .unwrap()
-      .then(resp => {
-        toastSuccess("Contact has been added to your book");
-        resetForm();
-      })
-      .catch(err => {
-        console.log(err);
-        toastError(
-          "Oops... Something went wrong =(. Please, reload page and try again"
-        );
-      });
+    try {
+      await addContact({ name: addingName, number: addingNumber }).unwrap();
+      toastSuccess("Contact has been added to your book");
+      resetForm();
+    } catch {
+      toastError(
+        "Oops... Something went wrong =(. Please, reload page and try again"
+      );
+    }
 
     // *
-
-    // await addContact({ name: addingName, number: addingNumber });
-    // if (isError) {
-    //   toastError(
-    //     "Oops... Something went wrong =(. Please, reload page and try again"
-    //   );
-    //   return;
-    // } else {
-    //   toastSuccess("Contact has been added to your book");
-    //   resetForm();
-    // }
   };
 
   return (

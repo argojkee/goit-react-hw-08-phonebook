@@ -5,11 +5,10 @@ import { BiLogIn } from "react-icons/bi";
 import { RegistrationLoginFormStyle } from "./RegistrationLoginFormStyle.styled";
 import { useRegisterMutation, useLogInMutation } from "redux/baseApi";
 import { toastSuccess, toastError } from "toastNotification/toastNotification";
-import { setUser } from "../../redux/auth/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
 import * as yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
+import { useEffect } from "react";
 
 interface IInitialLoginValues {
   email: string;
@@ -58,63 +57,30 @@ const schemaLogin = yup.object().shape({
 
 const RegistrationLoginForm = () => {
   const location = useLocation();
-  const [
-    registration,
-    { isLoading: isRegisterLoading, isError: isRegisterError },
-  ] = useRegisterMutation();
-  const [logIn, { isLoading: isLoginLoading, isError: isLoginError }] =
-    useLogInMutation();
-  const dispatch = useAppDispatch();
+  const [registration, { isLoading: isRegisterLoading }] =
+    useRegisterMutation();
+  const [logIn, { isLoading: isLoginLoading }] = useLogInMutation();
 
   const isLoginPage = location.pathname === "/login";
 
   const handleSubmit = async ({ name, email, password }) => {
     if (isLoginPage) {
-      logIn({ password, email })
-        .unwrap()
-        .then(resp => {
-          dispatch(
-            setUser({
-              user: resp.user,
-              token: resp.token,
-            })
-          );
-          toastSuccess("Log in successful. Welcome back to your phone book");
-        })
-        .catch(err => {
-          toastError(
-            "Not valid email or password. Please, try again or register new account"
-          );
-        });
+      try {
+        await logIn({ password, email }).unwrap();
 
-      // await logIn({ password, email });
-      // if (isLoginError) {
-      //   toastError("Something went wrong. Please try again or log in");
-      // } else {
-      //   toastSuccess("Log in" successful. Welcome to phone book");
-      // }
+        toastSuccess("Log in successful. Welcome back to your phone book");
+      } catch {
+        toastError(
+          "Not valid email or password. Please, try again or register new account"
+        );
+      }
     } else {
-      registration({ name, email, password })
-        .unwrap()
-        .then(resp => {
-          dispatch(
-            setUser({
-              user: resp.user,
-              token: resp.token,
-            })
-          );
-          toastSuccess("Registration successful. Welcome to phone book");
-        })
-        .catch(err => {
-          toastError("Something went wrong. Please, try again");
-        });
-
-      // await registration({ name, email, password });
-      // if (isRegisterError) {
-      //   toastError("Something went wrong. Please try again or log in");
-      // } else {
-      //   toastSuccess("Registration successful. Welcome to phone book");
-      // }
+      try {
+        await registration({ name, email, password }).unwrap();
+        toastSuccess("Registration successful. Welcome to phone book");
+      } catch {
+        toastError("Something went wrong. Please, try again");
+      }
     }
   };
 
@@ -141,7 +107,7 @@ const RegistrationLoginForm = () => {
             </div>
           )}
           <div className="label-container">
-            <Field placeholder="Email" id="email" type="email" />
+            <Field placeholder="Email" id="email" type="email" name="email" />
             <label htmlFor="email">Email</label>
           </div>
           <div className="label-container">

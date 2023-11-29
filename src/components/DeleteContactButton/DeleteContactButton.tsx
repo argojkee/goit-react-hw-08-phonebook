@@ -10,32 +10,21 @@ type Props = {
 
 const DeleteContactButton = ({ userId }: Props) => {
   const [isCurrentButton, setIsCurrentButton] = useState<boolean>(false);
-  const [deleteContact, { isLoading: Deleting, isError }] =
-    useDeleteContactMutation();
+  const [deleteContact, { isLoading: Deleting }] = useDeleteContactMutation();
 
   const handleDelete = async () => {
     setIsCurrentButton(true);
 
-    deleteContact(userId)
-      .unwrap()
-      .then(resp => toastSuccess("Contacts has been deleted from your book"))
-      .catch(err =>
-        toastError(
-          "Oops... Something went wrong =(. Please, reload page and try again"
-        )
-      )
-      .finally(() => setIsCurrentButton(false));
+    try {
+      await deleteContact(userId).unwrap();
+      toastSuccess("Contacts has been deleted from your book");
+    } catch {
+      toastError(
+        "Oops... Something went wrong =(. Please, reload page and try again"
+      );
+    }
 
-    // await deleteContact(userId);
-    // if (isError) {
-    //   toastError(
-    //     "Oops... Something went wrong =(. Please, reload page and try again"
-    //   );
-    // } else {
-    //   toastSuccess("Contacts has been deleted from your book");
-    // }
-
-    // setIsCurrentButton(false);
+    setIsCurrentButton(false);
   };
 
   return (

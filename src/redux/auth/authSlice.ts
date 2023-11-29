@@ -1,5 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { baseApi } from "../baseApi";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { baseApi } from "redux/baseApi";
+import { ExndpointType } from "../baseApi";
 
 type State = {
   user: {
@@ -8,7 +9,6 @@ type State = {
   };
   token: null | string;
 };
-
 const initialState: State = {
   user: { name: null, email: null },
   token: null,
@@ -17,36 +17,45 @@ const initialState: State = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    setUser: (
-      state,
-      action: PayloadAction<{
-        user: {
-          name: string;
-          email: string;
-        };
-        token: string;
-      }>
-    ) => {
-      return {
-        ...state,
-        user: action.payload.user,
-        token: action.payload.token,
-      };
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addMatcher(
+      (baseApi.endpoints as ExndpointType).logIn.matchFulfilled,
+      (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      }
+    );
+    builder.addMatcher(
+      (baseApi.endpoints as ExndpointType).register.matchFulfilled,
+      (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      }
+    );
+    builder.addMatcher(
+      (baseApi.endpoints as ExndpointType).logOut.matchFulfilled,
+      state => {
+        state.user = { name: null, email: null };
+        state.token = null;
+      }
+    );
 
-    resetUser: state => {
-      return {
-        ...state,
-        user: {
-          name: null,
-          email: null,
-        },
-        token: null,
-      };
-    },
+    builder.addMatcher(
+      (baseApi.endpoints as ExndpointType).fetchCurrentUser.matchFulfilled,
+      (state, action) => {
+        console.log(action);
+        state.user = action.payload;
+      }
+    );
+
+    builder.addMatcher(
+      (baseApi.endpoints as ExndpointType).fetchCurrentUser.matchRejected,
+      state => {
+        state.token = null;
+      }
+    );
   },
 });
 
-export const { setUser, resetUser } = authSlice.actions;
 export default authSlice.reducer;

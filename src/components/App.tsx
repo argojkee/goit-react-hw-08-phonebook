@@ -7,8 +7,7 @@ import PrivateRoute from "./Routes/PrivateRoute/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute/PublicRoute";
 import { getToken } from "redux/auth/authSelectors";
 import { useFetchCurrentUserMutation } from "redux/baseApi";
-import { resetUser, setUser } from "redux/auth/authSlice";
-import { useAppDispatch } from "../redux/hooks";
+import { toastError } from "toastNotification/toastNotification";
 
 const ContactsPage = lazy(() => import("../pages/ContactsPage"));
 const RegistrationPage = lazy(() => import("../pages/RegistrationPage"));
@@ -16,27 +15,17 @@ const LoginPage = lazy(() => import("../pages/LoginPage"));
 
 export const App = () => {
   const token = useAppSelector(getToken);
-  const dispatch = useAppDispatch();
   const [fetchCurrentUser, { isLoading: isLoadingAuthUser }] =
     useFetchCurrentUserMutation();
 
   useEffect(() => {
-    if (token) {
-      fetchCurrentUser()
-        .unwrap()
-        .then(resp => {
-          dispatch(
-            setUser({
-              user: resp,
-              token,
-            })
-          );
-        })
-        .catch(err => {
-          dispatch(resetUser());
-        });
+    if (!token) return;
+    try {
+      fetchCurrentUser().unwrap();
+    } catch {
+      toastError("Auth is old. Please log in again");
     }
-  }, [dispatch, fetchCurrentUser, token]);
+  }, [fetchCurrentUser, token]);
 
   return (
     !isLoadingAuthUser && (

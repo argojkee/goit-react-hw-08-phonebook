@@ -5,20 +5,15 @@ import { BiLogOut } from "react-icons/bi";
 import { UserMenuStyle } from "./UserMenuStyle.styled";
 import { useLogOutMutation } from "redux/baseApi";
 import { toastSuccess } from "toastNotification/toastNotification";
-import { resetUser } from "../../redux/auth/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
 
 const UserMenu = () => {
   const userEmail = useAppSelector(getUserEmail);
-  const [logOut, { isLoading: isPending, isError }] = useLogOutMutation();
-  const dispatch = useAppDispatch();
+  const [logOut, { isLoading: isPending }] = useLogOutMutation();
 
   const onLogOutClick = async () => {
-    await logOut();
-
-    dispatch(resetUser());
-
-    if (!isError) {
+    try {
+      await logOut().unwrap();
+    } finally {
       toastSuccess("Log out successful. Come back sooner");
     }
   };

@@ -1,9 +1,9 @@
-import { createPortal } from "react-dom";
-import { useCustomContext } from "context/userEditContext";
-import EditModalStyled from "./EditContactModal.styled";
-import EditContactForm from "./EditContactForm";
-import { useEffect } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { createPortal } from 'react-dom';
+import { useCustomContext } from 'context/userEditContext';
+import EditModalStyled from './EditContactModal.styled';
+import EditContactForm from './EditContactForm';
+import { useEffect } from 'react';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 const modalRoot = document.getElementById(
   "contact-edit-modal-root"
@@ -19,11 +19,11 @@ const EditContactModal = () => {
       }
       setIsShowModal(false);
     }
-    document.body.style.overflow = "hidden";
-    const paddingOffSet = window.innerWidth - document.body.offsetWidth + "px";
+    document.body.style.overflow = 'hidden';
+    const paddingOffSet = window.innerWidth - document.body.offsetWidth + 'px';
 
     document.body.style.paddingRight = paddingOffSet;
-    window.addEventListener("keydown", onEsc);
+    window.addEventListener('keydown', onEsc);
 
     return () => {
       window.removeEventListener("keydown", onEsc);
@@ -60,7 +60,7 @@ const EditContactModal = () => {
           </li>
           <li>
             <p className="user-info-item">
-              Current number:{" "}
+              Current number:{' '}
               <span className="user-info-current">{number}</span>
             </p>
           </li>

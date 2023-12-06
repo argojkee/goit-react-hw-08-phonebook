@@ -9,9 +9,9 @@ import { getToken } from "redux/auth/authSelectors";
 import { useFetchCurrentUserMutation } from "redux/baseApi";
 import { toastError } from "toastNotification/toastNotification";
 
-const ContactsPage = lazy(() => import("../pages/ContactsPage"));
-const RegistrationPage = lazy(() => import("../pages/RegistrationPage"));
-const LoginPage = lazy(() => import("../pages/LoginPage"));
+const ContactsPage = lazy(() => import('../pages/ContactsPage'));
+const RegistrationPage = lazy(() => import('../pages/RegistrationPage'));
+const LoginPage = lazy(() => import('../pages/LoginPage'));
 
 export const App = () => {
   const token = useAppSelector(getToken);

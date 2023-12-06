@@ -22,9 +22,9 @@ const middleware = getDefaultMiddleware =>
   }).concat(baseApi.middleware);
 
 const authPersistConfig = {
-  key: "auth",
+  key: 'auth',
   storage,
-  whitelist: ["token"],
+  whitelist: ['token'],
 };
 
 export const store = configureStore({
@@ -34,7 +34,7 @@ export const store = configureStore({
     auth: persistReducer(authPersistConfig, authSlice),
   },
   middleware,
-  devTools: process.env.NODE_ENV === "development",
+  devTools: process.env.NODE_ENV === 'development',
 });
 
 export const persistor = persistStore(store);

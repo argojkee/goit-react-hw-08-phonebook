@@ -14,22 +14,22 @@ const HomePage = () => {
         <h1>Contacts book</h1>
         {token ? (
           <h2>
-            Hello <span className="name">{userName} </span>, enter to your{" "}
+            Hello <span className="name">{userName} </span>, enter to your{' '}
             <Link className="link" to="/contacts">
-              contacts{" "}
+              contacts{' '}
             </Link>
             to find or create your contacts
           </h2>
         ) : (
           <h2>
-            Please{" "}
+            Please{' '}
             <Link className="link" to="register">
-              register{" "}
-            </Link>{" "}
-            or{" "}
+              register{' '}
+            </Link>{' '}
+            or{' '}
             <Link className="link" to="/login">
-              login{" "}
-            </Link>{" "}
+              login{' '}
+            </Link>{' '}
             to see your contacts
           </h2>
         )}

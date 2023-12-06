@@ -1,7 +1,7 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { filterSlice } from "./contacts/filterSlice";
-import authSlice from "./auth/authSlice";
-import { contactsSlice } from "./contacts/contactsSlice";
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { filterSlice } from './contacts/filterSlice';
+import authSlice from './auth/authSlice';
+import { contactsSlice } from './contacts/contactsSlice';
 import {
   persistStore,
   persistReducer,
@@ -11,8 +11,9 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { baseApi } from './baseApi';
 
 const middleware = [
   ...getDefaultMiddleware({
@@ -20,22 +21,24 @@ const middleware = [
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
   }),
+  baseApi.middleware,
 ];
 
 const authPersistConfig = {
-  key: "auth",
+  key: 'auth',
   storage,
-  whitelist: ["token"],
+  whitelist: ['token'],
 };
 
 export const store = configureStore({
   reducer: {
-    contactsList: contactsSlice.reducer,
+    [baseApi.reducerPath]: baseApi.reducer,
+    contacts: contactsSlice.reducer,
     filter: filterSlice.reducer,
     auth: persistReducer(authPersistConfig, authSlice),
   },
   middleware,
-  devTools: process.env.NODE_ENV === "development",
+  devTools: process.env.NODE_ENV === 'development',
 });
 
 export const persistor = persistStore(store);

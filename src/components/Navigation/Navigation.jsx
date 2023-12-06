@@ -1,14 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getIsLoggedIn } from 'redux/auth/authSelectors';
+import { getToken } from 'redux/auth/authSelectors';
 import { AiFillHome } from 'react-icons/ai';
 import { RiContactsBook2Line } from 'react-icons/ri';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const Navigation = () => {
-  const isLoggedin = useSelector(getIsLoggedIn);
   const { pathname } = useLocation();
+  const token = useSelector(getToken);
   const [currentPage, setCurrentPage] = useState('');
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Navigation = () => {
           Home
         </NavLink>
       </li>
-      {isLoggedin && (
+      {token && (
         <li>
           <NavLink
             to="/contacts"

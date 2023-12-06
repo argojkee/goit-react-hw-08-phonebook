@@ -1,18 +1,20 @@
-import { getUserEmail, getIsPending } from "redux/auth/authSelectors";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import operations from "redux/auth/authOperations";
-import { PiSpinnerGap } from "react-icons/pi";
-import { BiLogOut } from "react-icons/bi";
-import { UserMenuStyle } from "./UserMenuStyle";
+import { getUserEmail } from 'redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
+import { PiSpinnerGap } from 'react-icons/pi';
+import { BiLogOut } from 'react-icons/bi';
+import { UserMenuStyle } from './UserMenuStyle';
+import { useLogOutMutation } from 'redux/baseApi';
+import { toastSuccess } from 'toastNotification/toastNotification';
 
 const UserMenu = () => {
-  const dispatch = useDispatch();
-  const isPending = useSelector(getIsPending);
   const userEmail = useSelector(getUserEmail);
+  const [logOut, { isLoading: isPending }] = useLogOutMutation();
 
-  const onLogOutClick = () => {
-    dispatch(operations.logOut());
+  const onLogOutClick = async () => {
+    const result = await logOut();
+    if (!result.error) {
+      toastSuccess('Log out successful. Come back sooner');
+    }
   };
 
   return (

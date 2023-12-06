@@ -1,15 +1,8 @@
 import ContactItem from './ContactItem';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ContactsListStyled from './ContactsListStyle.styled';
-import {
-  getContactsList,
-  getLoading,
-  getError,
-} from 'redux/contacts/contactsSlice';
 import { getFilter } from 'redux/contacts/filterSlice';
-import { fetchContacts } from '../../redux/contacts/contactsOperations';
 import { useEffect } from 'react';
-import { getIsLoggedIn } from 'redux/auth/authSelectors';
 import EditContactModal from 'components/EditContactModal/EditContactModal';
 import { useCustomContext } from 'context/userEditContext';
 import MainSpinner from './MainSpinner';
@@ -17,20 +10,21 @@ import { ContactsContainerStyle } from './ContactsContainer.styled';
 import { GrFormNextLink, GrFormPreviousLink } from 'react-icons/gr';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
+import { useFetchContactsQuery } from '../../redux/baseApi';
 
 const ContactList = () => {
-  const contacts = useSelector(getContactsList);
   const filter = useSelector(getFilter);
-  const dispatch = useDispatch();
-  const error = useSelector(getError);
-  const isLoggedIn = useSelector(getIsLoggedIn);
   const context = useCustomContext();
-  const loading = useSelector(getLoading);
   const [visibleContacts, setVisibleContacts] = useState([]);
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
+  const {
+    data: contacts,
+    isLoading: loading,
+    isError: error,
+  } = useFetchContactsQuery();
 
   useEffect(() => {
     setVisibleContacts(
@@ -55,7 +49,6 @@ const ContactList = () => {
     const firstPage = paginationList?.firstElementChild.nextSibling;
     const endOffset = itemOffset + itemsPerPage;
 
-    console.log(endOffset);
     if (endOffset === itemsPerPage) {
       firstPage?.classList.add('active');
     } else {
@@ -82,16 +75,13 @@ const ContactList = () => {
     setItemOffset(newOffset);
   };
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(fetchContacts());
-    }
-  }, [dispatch, isLoggedIn]);
-
   if (error) {
     return (
       <ContactsContainerStyle>
-        <h2 className="error">{error}</h2>;
+        <h2 className="error">
+          Sorry, something went wrong. Please, try again
+        </h2>
+        ;
       </ContactsContainerStyle>
     );
   }
@@ -104,7 +94,7 @@ const ContactList = () => {
     );
   }
 
-  if (contacts.length === 0) {
+  if (contacts?.length === 0) {
     return (
       <ContactsContainerStyle>
         <h2 className="notification">
@@ -124,7 +114,7 @@ const ContactList = () => {
     );
   }
 
-  if (contacts.length > 0) {
+  if (contacts?.length > 0) {
     return (
       <ContactsContainerStyle>
         <ContactsListStyled>

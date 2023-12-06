@@ -8,7 +8,6 @@ import { toastSuccess, toastError } from "toastNotification/toastNotification";
 import * as yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
-import { useEffect } from "react";
 
 interface IInitialLoginValues {
   email: string;

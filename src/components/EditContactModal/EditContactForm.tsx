@@ -7,7 +7,6 @@ import { toastSuccess, toastError } from "toastNotification/toastNotification";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { ErrorText } from "components/ErrorFormText/ErrorFormTextStyle.styled";
-import { useState, useEffect } from "react";
 
 type InitialValuesType = {
   name: string;

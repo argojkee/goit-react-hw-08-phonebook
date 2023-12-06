@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { Navigate } from "react-router-dom";
 import { getToken } from "redux/auth/authSelectors";
